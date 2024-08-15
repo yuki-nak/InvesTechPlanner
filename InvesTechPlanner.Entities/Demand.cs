@@ -2,7 +2,7 @@
 {
     public class Demand
     {
-        public int DemandID { get; set; }
+        public int DemandId { get; set; }
         public string? Title { get; set; }
         public string? RequestedDept { get; set; }
         public string? RequestedBy { get; set; }

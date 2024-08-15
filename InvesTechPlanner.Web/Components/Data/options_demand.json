@@ -1,0 +1,32 @@
+{
+  "DemandCategory": [
+    "Category1",
+    "Category2",
+    "Category3"
+  ],
+  "RequestedDept": [
+    "Department1",
+    "Department2",
+    "Department3"
+  ],
+  "InvestClassification": [
+    "Classification1",
+    "Classification2",
+    "Classification3"
+  ],
+  "InvestmentScale": [
+    "Scale1",
+    "Scale2",
+    "Scale3"
+  ],
+  "DemandPriority": [
+    "Low",
+    "Middle",
+    "High"
+  ],
+  "FiscalYear": [
+    "2024",
+    "2025",
+    "2026"
+  ]
+}

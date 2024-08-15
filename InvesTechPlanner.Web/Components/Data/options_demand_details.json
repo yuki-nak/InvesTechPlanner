@@ -1,0 +1,38 @@
+{
+  "SpendDept": [
+    "",
+    "Finance",
+    "Human Resources",
+    "IT",
+    "Marketing",
+    "Operations",
+    "Sales"
+  ],
+  "ExpenseType": [
+    "",
+    "CapEx",
+    "OpEx"
+  ],
+  "SpendCategory": [
+    "",
+    "Hardware - Purchase",
+    "Hardware - Renting",
+    "Hardware - Maintenance",
+    "Software - Purchase",
+    "Software - Subsription",
+    "Software - Maintenance",
+    "External - Engineering",
+    "External - Operation",
+    "External - Management",
+    "External - Other",
+    "Internal - Engineering",
+    "Internal - Operation",
+    "Internal - Management",
+    "Internal - Other"
+  ],
+  "CostType": [
+    "",
+    "Direct (Hard saving)",
+    "Indirect (Soft saving)"
+  ]
+}

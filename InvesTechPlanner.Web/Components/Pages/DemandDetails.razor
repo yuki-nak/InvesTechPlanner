@@ -1,0 +1,201 @@
+﻿@page "/demand-details"
+@rendermode InteractiveServer
+@inject InvesTechPlanner.UseCases.Interfaces.IDemandDetailsService DemandDetailsService
+@inject NavigationManager Navigation
+@inject InvesTechPlanner.Web.Services.OptionsService OptionsService
+@inject InvesTechPlanner.UseCases.Interfaces.IDemandService DemandService
+@using InvesTechPlanner.UseCases.DTOs
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Demand Detail Registration</h2>
+
+    <EditForm Model="@demandDetail" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- Select Demand Title -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="DemandId" class="form-label">Select Demand:<span class="text-danger">*</span></label>
+                <InputSelect id="DemandId" @bind-Value="demandDetail.DemandId" class="form-control">
+                    @foreach (var demand in demands)
+                    {
+                        <option value="@demand.DemandId">@demand.Title</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.DemandId)" />
+            </div>
+        </div>
+
+        <!-- Demand Details Title -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Title" class="form-label">Details Title:<span class="text-danger">*</span></label>
+                <InputText id="Title" @bind-Value="demandDetail.Title" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Title)" />
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Description" class="form-label">Description:</label>
+                <InputTextArea id="Description" @bind-Value="demandDetail.Description" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demandDetail.Description)" />
+            </div>
+        </div>
+
+        <!-- Spend Dept, Expense Type -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="SpendDept" class="form-label">Spend Dept:</label>
+                <InputSelect id="SpendDept" @bind-Value="demandDetail.SpendDept" class="form-control">
+                    @foreach (var dept in spendDepts)
+                    {
+                        <option value="@dept">@dept</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.SpendDept)" />
+            </div>
+            <div class="col-md-6">
+                <label for="ExpenseType" class="form-label">Expense Type:</label>
+                <InputSelect id="ExpenseType" @bind-Value="demandDetail.ExpenseType" class="form-control">
+                    @foreach (var expense in expenseTypes)
+                    {
+                        <option value="@expense">@expense</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.ExpenseType)" />
+            </div>
+        </div>
+
+        <!-- Spend Category, Cost Type -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="SpendCategory" class="form-label">Spend Category:</label>
+                <InputSelect id="SpendCategory" @bind-Value="demandDetail.SpendCategory" class="form-control">
+                    @foreach (var category in spendCategories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.SpendCategory)" />
+            </div>
+            <div class="col-md-6">
+                <label for="CostType" class="form-label">Cost Type:</label>
+                <InputSelect id="CostType" @bind-Value="demandDetail.CostType" class="form-control">
+                    @foreach (var cost in costTypes)
+                    {
+                        <option value="@cost">@cost</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.CostType)" />
+            </div>
+        </div>
+
+        <!-- Cost Amount, Current Cost -->
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <label for="CurrentCost" class="form-label">Current Cost:</label>
+                <InputNumber id="CurrentCost" @bind-Value="demandDetail.CurrentCost" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.CurrentCost)" />
+            </div>
+        </div>
+
+        <!-- Year0 - Year5 -->
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <label for="Year0" class="form-label">Year 0:</label>
+                <InputNumber id="Year0" @bind-Value="demandDetail.Year0" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Year0)" />
+            </div>
+            <div class="col-md-2">
+                <label for="Year1" class="form-label">Year 1:</label>
+                <InputNumber id="Year1" @bind-Value="demandDetail.Year1" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Year1)" />
+            </div>
+            <div class="col-md-2">
+                <label for="Year2" class="form-label">Year 2:</label>
+                <InputNumber id="Year2" @bind-Value="demandDetail.Year2" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Year2)" />
+            </div>
+            <div class="col-md-2">
+                <label for="Year3" class="form-label">Year 3:</label>
+                <InputNumber id="Year3" @bind-Value="demandDetail.Year3" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Year3)" />
+            </div>
+            <div class="col-md-2">
+                <label for="Year4" class="form-label">Year 4:</label>
+                <InputNumber id="Year4" @bind-Value="demandDetail.Year4" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Year4)" />
+            </div>
+            <div class="col-md-2">
+                <label for="Year5" class="form-label">Year 5:</label>
+                <InputNumber id="Year5" @bind-Value="demandDetail.Year5" class="form-control" />
+                <ValidationMessage For="@(() => demandDetail.Year5)" />
+            </div>
+        </div>
+
+        <!-- Remarks -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Remarks" class="form-label">Remarks:</label>
+                <InputTextArea id="Remarks" @bind-Value="demandDetail.Remarks" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demandDetail.Remarks)" />
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg" disabled="@isSubmitting">Submit</button>
+        </div>
+    </EditForm>
+
+    @if (isSubmitting)
+    {
+        <div class="text-center mt-3">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private DemandDetailDto demandDetail = new DemandDetailDto();
+    private bool isSubmitting = false;
+
+    private List<DemandDto> demands = new();  // Demand titles and IDs
+    private List<string> spendDepts = new();
+    private List<string> expenseTypes = new();
+    private List<string> spendCategories = new();
+    private List<string> costTypes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Retrieve demands for the select list
+        demands = (await DemandService.GetDemandListItems()).ToList();
+
+        // Retrieve other options from JSON
+        var options = await OptionsService.GetOptionsAsync("options_demand_details.json");
+
+        spendDepts = options.GetValueOrDefault("SpendDept", new List<string>());
+        expenseTypes = options.GetValueOrDefault("ExpenseType", new List<string>());
+        spendCategories = options.GetValueOrDefault("SpendCategory", new List<string>());
+        costTypes = options.GetValueOrDefault("CostType", new List<string>());
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        isSubmitting = true;
+        await DemandDetailsService.CreateDemandDetail(demandDetail);
+        isSubmitting = false;
+        Navigation.NavigateTo("/success");
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        isSubmitting = false;
+        Console.WriteLine("Validation failed. The form was not submitted.");
+    }
+}

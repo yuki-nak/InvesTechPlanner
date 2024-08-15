@@ -1,0 +1,262 @@
+﻿@page "/demand"
+@rendermode InteractiveServer
+@inject InvesTechPlanner.UseCases.Interfaces.IDemandService DemandService
+@inject NavigationManager Navigation
+@inject InvesTechPlanner.Web.Services.OptionsService OptionsService
+@using InvesTechPlanner.UseCases.DTOs
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Demand Registration</h2>
+
+    <EditForm Model="@demand" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- Title -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Title" class="form-label">Title:<span class="text-danger">*</span></label>
+                <InputText id="Title" @bind-Value="demand.Title" class="form-control" />
+                <ValidationMessage For="@(() => demand.Title)" />
+            </div>
+        </div>
+
+        <!-- Demand Category, Requested Dept -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="DemandCategory" class="form-label">Demand Category:<span class="text-danger">*</span></label>
+                <InputSelect id="DemandCategory" @bind-Value="demand.DemandCategory" class="form-control">
+                    @foreach (var category in demandCategories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demand.DemandCategory)" />
+            </div>
+            <div class="col-md-6">
+                <label for="RequestedDept" class="form-label">Requested Dept:<span class="text-danger">*</span></label>
+                <InputSelect id="RequestedDept" @bind-Value="demand.RequestedDept" class="form-control">
+                    @foreach (var dept in requestedDepts)
+                    {
+                        <option value="@dept">@dept</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demand.RequestedDept)" />
+            </div>
+        </div>
+
+        <!-- Demand Owner, RequestedBy -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="DemandOwner" class="form-label">Demand Owner:<span class="text-danger">*</span></label>
+                <InputText id="DemandOwner" @bind-Value="demand.DemandOwner" class="form-control" />
+                <ValidationMessage For="@(() => demand.DemandOwner)" />
+            </div>
+            <div class="col-md-6">
+                <label for="RequestedBy" class="form-label">Requested By:<span class="text-danger">*</span></label>
+                <InputText id="RequestedBy" @bind-Value="demand.RequestedBy" class="form-control" />
+                <ValidationMessage For="@(() => demand.RequestedBy)" />
+            </div>
+        </div>
+
+        <!-- Objective -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Objective" class="form-label">Objective:</label>
+                <InputTextArea id="Objective" @bind-Value="demand.Objective" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.Objective)" />
+            </div>
+        </div>
+
+        <!-- Proposal -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Proposal" class="form-label">Proposal:</label>
+                <InputTextArea id="Proposal" @bind-Value="demand.Proposal" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.Proposal)" />
+            </div>
+        </div>
+
+        <!-- Investment Details -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="InvestmentDetails" class="form-label">Investment Details:</label>
+                <InputTextArea id="InvestmentDetails" @bind-Value="demand.InvestmentDetails" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.InvestmentDetails)" />
+            </div>
+        </div>
+
+        <!-- Business Impact If Not Conducted -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="BusinessImpactIfNotConducted" class="form-label">Business Impact If Not Conducted:</label>
+                <InputTextArea id="BusinessImpactIfNotConducted" @bind-Value="demand.BusinessImpactIfNotConducted" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.BusinessImpactIfNotConducted)" />
+            </div>
+        </div>
+
+        <!-- Assumption -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Assumption" class="form-label">Assumption:</label>
+                <InputTextArea id="Assumption" @bind-Value="demand.Assumption" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.Assumption)" />
+            </div>
+        </div>
+
+        <!-- Dependency -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Dependency" class="form-label">Dependency:</label>
+                <InputTextArea id="Dependency" @bind-Value="demand.Dependency" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.Dependency)" />
+            </div>
+        </div>
+
+        <!-- Risk Comment -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="RiskComment" class="form-label">Risk Comment:</label>
+                <InputTextArea id="RiskComment" @bind-Value="demand.RiskComment" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => demand.RiskComment)" />
+            </div>
+        </div>
+
+        <!-- Invest Classification, Investment Scale, Demand Priority -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="InvestClassification" class="form-label">Invest Classification:</label>
+                <InputSelect id="InvestClassification" @bind-Value="demand.InvestClassification" class="form-control">
+                    @foreach (var classification in investClassifications)
+                    {
+                        <option value="@classification">@classification</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demand.InvestClassification)" />
+            </div>
+            <div class="col-md-4">
+                <label for="InvestmentScale" class="form-label">Investment Scale:</label>
+                <InputSelect id="InvestmentScale" @bind-Value="demand.InvestmentScale" class="form-control">
+                    @foreach (var scale in investmentScales)
+                    {
+                        <option value="@scale">@scale</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demand.InvestmentScale)" />
+            </div>
+            <div class="col-md-4">
+                <label for="DemandPriority" class="form-label">Demand Priority:</label>
+                <InputSelect id="DemandPriority" @bind-Value="demand.DemandPriority" class="form-control">
+                    @foreach (var priority in demandPriorities)
+                    {
+                        <option value="@priority">@priority</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demand.DemandPriority)" />
+            </div>
+        </div>
+
+        <!-- IT Business Partner, PMO Responsible -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="ITBizPartner" class="form-label">IT Business Partner:</label>
+                <InputText id="ITBizPartner" @bind-Value="demand.ITBizPartner" class="form-control" />
+                <ValidationMessage For="@(() => demand.ITBizPartner)" />
+            </div>
+            <div class="col-md-6">
+                <label for="PMOResponsible" class="form-label">PMO Responsible:</label>
+                <InputText id="PMOResponsible" @bind-Value="demand.PMOResponsible" class="form-control" />
+                <ValidationMessage For="@(() => demand.PMOResponsible)" />
+            </div>
+        </div>
+
+        <!-- Planned Start, Planned End, Fiscal Year -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="PlannedStart" class="form-label">Planned Start:</label>
+                <InputDate id="PlannedStart" @bind-Value="demand.PlannedStart" class="form-control" />
+                <ValidationMessage For="@(() => demand.PlannedStart)" />
+            </div>
+            <div class="col-md-4">
+                <label for="PlannedEnd" class="form-label">Planned End:</label>
+                <InputDate id="PlannedEnd" @bind-Value="demand.PlannedEnd" class="form-control" />
+                <ValidationMessage For="@(() => demand.PlannedEnd)" />
+            </div>
+            <div class="col-md-4">
+                <label for="FiscalYear" class="form-label">Fiscal Year:<span class="text-danger">*</span></label>
+                <InputSelect id="FiscalYear" @bind-Value="demand.FiscalYear" class="form-control">
+                    @foreach (var year in fiscalYears)
+                    {
+                        <option value="@year">@year</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demand.FiscalYear)" />
+            </div>
+        </div>
+
+        <!-- Remarks -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="Remarks" class="form-label">Remarks:</label>
+                <InputTextArea id="Remarks" @bind-Value="demand.Remarks" class="form-control" rows="4" />
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg" disabled="@isSubmitting">Submit</button>
+        </div>
+    </EditForm>
+
+    @if (isSubmitting)
+    {
+        <div class="text-center mt-3">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private DemandDto demand = new DemandDto();
+    private bool isSubmitting = false;
+
+    private List<string> demandCategories = new();
+    private List<string> requestedDepts = new();
+    private List<string> investClassifications = new();
+    private List<string> investmentScales = new();
+    private List<string> fiscalYears = new();
+    private List<string> demandPriorities = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var options = await OptionsService.GetOptionsAsync("options_demand.json");
+
+        demandCategories = options.GetValueOrDefault("DemandCategory", new List<string>());
+        requestedDepts = options.GetValueOrDefault("RequestedDept", new List<string>());
+        investClassifications = options.GetValueOrDefault("InvestClassification", new List<string>());
+        investmentScales = options.GetValueOrDefault("InvestmentScale", new List<string>());
+        fiscalYears = options.GetValueOrDefault("FiscalYear", new List<string>());
+        demandPriorities = options.GetValueOrDefault("DemandPriority", new List<string>());
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        isSubmitting = true;
+        await DemandService.CreateDemand(demand);
+        isSubmitting = false;
+        Navigation.NavigateTo("/success");
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        isSubmitting = false;
+        Console.WriteLine("Validation failed. The form was not submitted.");
+    }
+
+    private void RedirectToHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

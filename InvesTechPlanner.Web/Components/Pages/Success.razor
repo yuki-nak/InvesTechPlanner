@@ -1,0 +1,16 @@
+﻿@page "/success"
+@rendermode InteractiveServer
+
+<h3>Submission Successful!</h3>
+<p>Your request has been successfully submitted.</p>
+
+<button class="btn btn-primary mt-3" @onclick="GoToHome">Back to Home</button>
+
+@code {
+    [Inject] private NavigationManager? Navigation { get; set; }
+
+    private void GoToHome()
+    {
+        Navigation?.NavigateTo("/");
+    }
+}

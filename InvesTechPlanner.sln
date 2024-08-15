@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvesTechPlanner.Web", "InvesTechPlanner.Web\InvesTechPlanner.Web.csproj", "{07A010C3-74DC-4A06-B27E-91D28D59EEE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvesTechPlanner.Web", "InvesTechPlanner.Web\InvesTechPlanner.Web.csproj", "{07A010C3-74DC-4A06-B27E-91D28D59EEE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvesTechPlanner.Entities", "InvesTechPlanner.Entities\InvesTechPlanner.Entities.csproj", "{306ED868-BEE0-49EA-B18C-2FC562A85417}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvesTechPlanner.Entities", "InvesTechPlanner.Entities\InvesTechPlanner.Entities.csproj", "{306ED868-BEE0-49EA-B18C-2FC562A85417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvesTechPlanner.UseCases", "InvesTechPlanner.UseCases\InvesTechPlanner.UseCases.csproj", "{D0F14E9E-2365-43B7-8225-9833320B2F71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvesTechPlanner.UseCases", "InvesTechPlanner.UseCases\InvesTechPlanner.UseCases.csproj", "{D0F14E9E-2365-43B7-8225-9833320B2F71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvesTechPlanner.Infrastructure", "InvesTechPlanner.Infrastructure\InvesTechPlanner.Infrastructure.csproj", "{DBD6D8D2-9EB4-40D7-86C3-01448C85DA42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvesTechPlanner.Infrastructure", "InvesTechPlanner.Infrastructure\InvesTechPlanner.Infrastructure.csproj", "{DBD6D8D2-9EB4-40D7-86C3-01448C85DA42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
