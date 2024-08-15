@@ -1,7 +1,6 @@
 ﻿using InvesTechPlanner.Entities;
 using InvesTechPlanner.UseCases.DTOs;
 using InvesTechPlanner.UseCases.Interfaces;
-using System.Globalization;
 
 namespace InvesTechPlanner.UseCases
 {
@@ -26,6 +25,7 @@ namespace InvesTechPlanner.UseCases
                 DemandPriority = demandDto.DemandPriority,
                 Assumption = demandDto.Assumption,
                 Dependency = demandDto.Dependency,
+                Status = demandDto.Status,
                 InvestClassification = demandDto.InvestClassification,
                 InvestmentScale = demandDto.InvestmentScale,
                 PMOResponsible = demandDto.PMOResponsible,
@@ -55,6 +55,7 @@ namespace InvesTechPlanner.UseCases
                 FiscalYear = d.FiscalYear,
                 DemandCategory = d.DemandCategory,
                 RequestedDept = d.RequestedDept,
+                Status = d.Status,
                 InvestmentScale = d.InvestmentScale,
                 DemandPriority = d.DemandPriority
             }).ToList();
@@ -69,6 +70,7 @@ namespace InvesTechPlanner.UseCases
                 FiscalYears = demands.Select(d => d.FiscalYear?.ToString() ?? "Unknown").Distinct().OrderBy(y => y).ToList<string?>(),
                 DemandCategories = demands.Select(d => d.DemandCategory ?? "Unknown").Distinct().OrderBy(c => c).ToList<string?>(),
                 RequestedDepts = demands.Select(d => d.RequestedDept ?? "Unknown").Distinct().OrderBy(d => d).ToList<string?>(),
+                Statuses = demands.Select(d => d.Status ?? "Unknown").Distinct().OrderBy(s => s).ToList<string?>(),
                 InvestmentScales = demands.Select(d => d.InvestmentScale ?? "Unknown").Distinct().OrderBy(s => s).ToList<string?>(),
                 DemandPriorities = demands.Select(d => d.DemandPriority ?? "Unknown").Distinct().OrderBy(p => p).ToList<string?>(),
             };
@@ -86,6 +88,7 @@ namespace InvesTechPlanner.UseCases
                 FiscalYear = d.FiscalYear,
                 DemandCategory = d.DemandCategory,
                 RequestedDept = d.RequestedDept,
+                Status = d.Status,
                 InvestmentScale = d.InvestmentScale,
                 DemandPriority = d.DemandPriority
             }).ToList();

@@ -20,11 +20,11 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             using var connection = _connectionFactory.CreateConnection();
             const string insertQuery = @"
                 INSERT INTO Demand (Title, RequestedDept, RequestedBy, DemandOwner, DemandCategory, Objective, Proposal, InvestmentDetails, 
-                                    BusinessImpactIfNotConducted, RiskComment, DemandPriority, Assumption, Dependency, InvestClassification, 
+                                    BusinessImpactIfNotConducted, RiskComment, DemandPriority, Assumption, Dependency, Status, InvestClassification, 
                                     InvestmentScale, PMOResponsible, ITBizPartner, PlannedStart, PlannedEnd, FiscalYear, DateCreated, DateUpdated, 
                                     CreatedBy, IsInactive, Remarks)
                 VALUES (@Title, @RequestedDept, @RequestedBy, @DemandOwner, @DemandCategory, @Objective, @Proposal, @InvestmentDetails, 
-                        @BusinessImpactIfNotConducted, @RiskComment, @DemandPriority, @Assumption, @Dependency, @InvestClassification, 
+                        @BusinessImpactIfNotConducted, @RiskComment, @DemandPriority, @Assumption, @Dependency, @Status, @InvestClassification, 
                         @InvestmentScale, @PMOResponsible, @ITBizPartner, @PlannedStart, @PlannedEnd, @FiscalYear, @DateCreated, 
                         @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
 
@@ -66,6 +66,10 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             {
                 queryBuilder.Append(" AND RequestedDept = @RequestedDept");
             }
+            if (!string.IsNullOrEmpty(filterOptions.Status))
+            {
+                queryBuilder.Append(" AND Status = @Status");
+            }
             if (!string.IsNullOrEmpty(filterOptions.InvestmentScale))
             {
                 queryBuilder.Append(" AND InvestmentScale = @InvestmentScale");
@@ -88,7 +92,7 @@ namespace InvesTechPlanner.Infrastructure.Repositories
                 SET Title = @Title, RequestedDept = @RequestedDept, RequestedBy = @RequestedBy, DemandOwner = @DemandOwner, 
                     DemandCategory = @DemandCategory, Objective = @Objective, Proposal = @Proposal, InvestmentDetails = @InvestmentDetails, 
                     BusinessImpactIfNotConducted = @BusinessImpactIfNotConducted, RiskComment = @RiskComment, DemandPriority = @DemandPriority, 
-                    Assumption = @Assumption, Dependency = @Dependency, InvestClassification = @InvestClassification, 
+                    Assumption = @Assumption, Dependency = @Dependency, Status = @Status, InvestClassification = @InvestClassification, 
                     InvestmentScale = @InvestmentScale, PMOResponsible = @PMOResponsible, ITBizPartner = @ITBizPartner, 
                     PlannedStart = @PlannedStart, PlannedEnd = @PlannedEnd, FiscalYear = @FiscalYear, DateUpdated = @DateUpdated, 
                     CreatedBy = @CreatedBy, IsInactive = @IsInactive, Remarks = @Remarks
@@ -120,11 +124,11 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             const string historyInsertQuery = @"
                 INSERT INTO DemandHistory (DemandID, Title, RequestedDept, RequestedBy, DemandOwner, DemandCategory, Objective, Proposal, 
                                            InvestmentDetails, BusinessImpactIfNotConducted, RiskComment, DemandPriority, Assumption, Dependency, 
-                                           InvestClassification, InvestmentScale, PMOResponsible, ITBizPartner, PlannedStart, PlannedEnd, FiscalYear, 
+                                           Status, InvestClassification, InvestmentScale, PMOResponsible, ITBizPartner, PlannedStart, PlannedEnd, FiscalYear, 
                                            DateCreated, DateUpdated, CreatedBy, IsInactive, Remarks)
                 VALUES (@DemandID, @Title, @RequestedDept, @RequestedBy, @DemandOwner, @DemandCategory, @Objective, @Proposal, 
                         @InvestmentDetails, @BusinessImpactIfNotConducted, @RiskComment, @DemandPriority, @Assumption, @Dependency, 
-                        @InvestClassification, @InvestmentScale, @PMOResponsible, @ITBizPartner, @PlannedStart, @PlannedEnd, @FiscalYear, 
+                        @Status, @InvestClassification, @InvestmentScale, @PMOResponsible, @ITBizPartner, @PlannedStart, @PlannedEnd, @FiscalYear, 
                         @DateCreated, @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
 
             await connection.ExecuteAsync(historyInsertQuery, demand);

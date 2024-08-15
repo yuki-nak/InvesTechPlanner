@@ -16,6 +16,7 @@
         public string? DemandPriority { get; set; }
         public string? Assumption { get; set; }
         public string? Dependency { get; set; }
+        public string? Status { get; set; }
         public string? InvestClassification { get; set; }
         public string? InvestmentScale { get; set; }
         public string? PMOResponsible { get; set; }

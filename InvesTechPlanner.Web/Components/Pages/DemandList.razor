@@ -32,15 +32,17 @@
         </div>
     }
 
-    <!-- CSV download -->
-    <button class="btn btn-secondary" @onclick="ExportCsv">Export to CSV</button>
-
+    <!-- Filter and CSV download button -->
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary me-2" @onclick="ApplyFilters" style="white-space: nowrap;">Apply Filters</button>
+        <button class="btn btn-secondary" @onclick="ExportCsv" style="white-space: nowrap;">Export to CSV</button>
+    </div>
 
     <!-- Filter Section -->
     <div class="row mb-4">
         <div class="col-md-2">
-            <label for="FiscalYearFilter" class="form-label">Fiscal Year</label>
-            <InputSelect id="FiscalYearFilter" @bind-Value="selectedFiscalYear" class="form-control">
+            <label for="FiscalYearFilter" class="form-label">Year</label>
+            <InputSelect id="FiscalYearFilter" @bind-Value="selectedFiscalYear" class="form-control" @onchange="ApplyFilters">
                 <option value="">All</option>
                 @foreach (var year in fiscalYears)
                 {
@@ -50,7 +52,7 @@
         </div>
         <div class="col-md-2">
             <label for="CategoryFilter" class="form-label">Category</label>
-            <InputSelect id="CategoryFilter" @bind-Value="selectedCategory" class="form-control">
+            <InputSelect id="CategoryFilter" @bind-Value="selectedCategory" class="form-control" @onchange="ApplyFilters">
                 <option value="">All</option>
                 @foreach (var category in demandCategories)
                 {
@@ -59,8 +61,8 @@
             </InputSelect>
         </div>
         <div class="col-md-2">
-            <label for="DeptFilter" class="form-label">Requested Dept</label>
-            <InputSelect id="DeptFilter" @bind-Value="selectedDept" class="form-control">
+            <label for="DeptFilter" class="form-label">Dept</label>
+            <InputSelect id="DeptFilter" @bind-Value="selectedDept" class="form-control" @onchange="ApplyFilters">
                 <option value="">All</option>
                 @foreach (var dept in requestedDepts)
                 {
@@ -69,8 +71,18 @@
             </InputSelect>
         </div>
         <div class="col-md-2">
+            <label for="StatusFilter" class="form-label">Status</label>
+            <InputSelect id="StatusFilter" @bind-Value="selectedStatus" class="form-control" @onchange="ApplyFilters">
+                <option value="">All</option>
+                @foreach (var status in statuses)
+                {
+                    <option value="@status">@status</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-md-2">
             <label for="ScaleFilter" class="form-label">Scale</label>
-            <InputSelect id="ScaleFilter" @bind-Value="selectedScale" class="form-control">
+            <InputSelect id="ScaleFilter" @bind-Value="selectedScale" class="form-control" @onchange="ApplyFilters">
                 <option value="">All</option>
                 @foreach (var scale in investmentScales)
                 {
@@ -80,7 +92,7 @@
         </div>
         <div class="col-md-2">
             <label for="PriorityFilter" class="form-label">Priority</label>
-            <InputSelect id="PriorityFilter" @bind-Value="selectedPriority" class="form-control">
+            <InputSelect id="PriorityFilter" @bind-Value="selectedPriority" class="form-control" @onchange="ApplyFilters">
                 <option value="">All</option>
                 @foreach (var priority in demandPriorities)
                 {
@@ -88,19 +100,17 @@
                 }
             </InputSelect>
         </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button class="btn btn-primary" @onclick="ApplyFilters">Apply Filters</button>
-        </div>
     </div>
 
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Fiscal Year</th>
+                <th>Year</th>
                 <th>Title</th>
                 <th>Category</th>
-                <th>Requested Dept</th>
+                <th>Dept</th>
+                <th>Status</th>
                 <th>Scale</th>
                 <th>Priority</th>
                 <th>Actions</th>
@@ -123,6 +133,7 @@
                         <td>@demand.Title</td>
                         <td>@demand.DemandCategory</td>
                         <td>@demand.RequestedDept</td>
+                        <td>@demand.Status</td>
                         <td>@demand.InvestmentScale</td>
                         <td>@demand.DemandPriority</td>
                         <td>
@@ -142,12 +153,14 @@
     private List<string> fiscalYears = new();
     private List<string> demandCategories = new();
     private List<string> requestedDepts = new();
+    private List<string> statuses = new();
     private List<string> investmentScales = new();
     private List<string> demandPriorities = new();
 
     private string selectedFiscalYear = "";
     private string selectedCategory = "";
     private string selectedDept = "";
+    private string selectedStatus = "";
     private string selectedScale = "";
     private string selectedPriority = "";
 
@@ -164,6 +177,7 @@
         fiscalYears = options.FiscalYears;
         demandCategories = options.DemandCategories;
         requestedDepts = options.RequestedDepts;
+        statuses = options.Statuses;
         investmentScales = options.InvestmentScales;
         demandPriorities = options.DemandPriorities;
     }
@@ -189,6 +203,7 @@
             (string.IsNullOrEmpty(selectedFiscalYear) || (selectedFiscalYear == "Unknown" && d.FiscalYear == null) || d.FiscalYear.ToString() == selectedFiscalYear) &&
             (string.IsNullOrEmpty(selectedCategory) || (selectedCategory == "Unknown" && d.DemandCategory == null) || d.DemandCategory == selectedCategory) &&
             (string.IsNullOrEmpty(selectedDept) || (selectedDept == "Unknown" && d.RequestedDept == null) || d.RequestedDept == selectedDept) &&
+             (string.IsNullOrEmpty(selectedStatus) || (selectedStatus == "Unknown" && d.Status == null) || d.Status == selectedStatus) &&
             (string.IsNullOrEmpty(selectedScale) || (selectedScale == "Unknown" && d.InvestmentScale == null) || d.InvestmentScale == selectedScale) &&
             (string.IsNullOrEmpty(selectedPriority) || (selectedPriority == "Unknown" && d.DemandPriority == null) || d.DemandPriority == selectedPriority)
         ).ToList();
