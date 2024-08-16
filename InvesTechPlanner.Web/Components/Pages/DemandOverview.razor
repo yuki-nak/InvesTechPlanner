@@ -1,0 +1,377 @@
+﻿@page "/demand-overview/{demandId:int}"
+@rendermode InteractiveServer
+@inject InvesTechPlanner.UseCases.Interfaces.IDemandService DemandService
+@inject NavigationManager Navigation
+@inject InvesTechPlanner.Web.Services.OptionsService OptionsService
+@using InvesTechPlanner.UseCases.DTOs
+
+<h3>Demand Overview</h3>
+
+@if (demand == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-secondary me-2" @onclick="NavigateToList">Back to List</button>
+        @if (isEditMode)
+        {
+            <button class="btn btn-secondary me-2" @onclick="CancelEdit">Cancel</button>
+        }
+        <button class="btn btn-primary" @onclick="ToggleEditMode">
+            @(isEditMode ? "Save" : "Edit")
+        </button>
+    </div>
+
+
+
+    <EditForm Model="@demand" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Title</label>
+                @if (isEditMode)
+                {
+                    <InputText class="form-control" @bind-Value="demand.Title" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.Title</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Demand Category</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.DemandCategory">
+                        @foreach (var category in demandCategories)
+                        {
+                            <option value="@category">@category</option>
+                        }
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.DemandCategory</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Requested Dept</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.RequestedDept">
+                        @foreach (var dept in requestedDepts)
+                        {
+                            <option value="@dept">@dept</option>
+                        }
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.RequestedDept</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Demand Owner</label>
+                @if (isEditMode)
+                {
+                    <InputText class="form-control" @bind-Value="demand.DemandOwner" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.DemandOwner</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Requested By</label>
+                @if (isEditMode)
+                {
+                    <InputText class="form-control" @bind-Value="demand.RequestedBy" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.RequestedBy</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Fiscal Year</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.FiscalYear">
+                        @foreach (var year in fiscalYears)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.FiscalYear</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label">Objective</label>
+                @if (isEditMode)
+                {
+                    <InputTextArea class="form-control" @bind-Value="demand.Objective" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.Objective</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label">Proposal</label>
+                @if (isEditMode)
+                {
+                    <InputTextArea class="form-control" @bind-Value="demand.Proposal" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.Proposal</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Investment Details</label>
+                @if (isEditMode)
+                {
+                    <InputTextArea class="form-control" @bind-Value="demand.InvestmentDetails" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.InvestmentDetails</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Business Impact If Not Conducted</label>
+                @if (isEditMode)
+                {
+                    <InputTextArea class="form-control" @bind-Value="demand.BusinessImpactIfNotConducted" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.BusinessImpactIfNotConducted</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Risk Comment</label>
+                @if (isEditMode)
+                {
+                    <InputTextArea class="form-control" @bind-Value="demand.RiskComment" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.RiskComment</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Demand Priority</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.DemandPriority">
+                        @foreach (var priority in demandPriorities)
+                        {
+                            <option value="@priority">@priority</option>
+                        }
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.DemandPriority</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Status</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.Status">
+                        <option value="Open">Open</option>
+                        <option value="Closed">Closed</option>
+                        <option value="On Hold">On Hold</option>
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.Status</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Invest Classification</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.InvestClassification">
+                        @foreach (var classification in investClassifications)
+                        {
+                            <option value="@classification">@classification</option>
+                        }
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.InvestClassification</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Investment Scale</label>
+                @if (isEditMode)
+                {
+                    <InputSelect class="form-control" @bind-Value="demand.InvestmentScale">
+                        @foreach (var scale in investmentScales)
+                        {
+                            <option value="@scale">@scale</option>
+                        }
+                    </InputSelect>
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.InvestmentScale</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">PMO Responsible</label>
+                @if (isEditMode)
+                {
+                    <InputText class="form-control" @bind-Value="demand.PMOResponsible" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.PMOResponsible</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">IT Business Partner</label>
+                @if (isEditMode)
+                {
+                    <InputText class="form-control" @bind-Value="demand.ITBizPartner" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.ITBizPartner</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Planned Start</label>
+                @if (isEditMode)
+                {
+                    <InputDate class="form-control" @bind-Value="demand.PlannedStart" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.PlannedStart?.ToShortDateString()</p>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Planned End</label>
+                @if (isEditMode)
+                {
+                    <InputDate class="form-control" @bind-Value="demand.PlannedEnd" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.PlannedEnd?.ToShortDateString()</p>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Remarks</label>
+                @if (isEditMode)
+                {
+                    <InputTextArea class="form-control" @bind-Value="demand.Remarks" />
+                }
+                else
+                {
+                    <p class="form-control-static">@demand.Remarks</p>
+                }
+            </div>
+        </div>
+    </EditForm>
+}
+
+@code {
+    private DemandDto demand = new();
+    private bool isEditMode = false;
+    private List<string> fiscalYears = new();
+    private List<string> demandCategories = new();
+    private List<string> requestedDepts = new();
+    private List<string> demandPriorities = new();
+    private List<string> investClassifications = new();
+    private List<string> investmentScales = new();
+
+    [Parameter]
+    public int DemandId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Demand情報の取得
+        demand = await DemandService.GetDemandById(DemandId);
+
+        // リスト項目の取得
+        var options = await OptionsService.GetOptionsAsync("options_demand.json");
+
+        fiscalYears = options.GetValueOrDefault("FiscalYear", new List<string>());
+        demandCategories = options.GetValueOrDefault("DemandCategory", new List<string>());
+        requestedDepts = options.GetValueOrDefault("RequestedDept", new List<string>());
+        demandPriorities = options.GetValueOrDefault("DemandPriority", new List<string>());
+        investClassifications = options.GetValueOrDefault("InvestClassification", new List<string>());
+        investmentScales = options.GetValueOrDefault("InvestmentScale", new List<string>());
+    }
+
+    private void ToggleEditMode()
+    {
+        if (isEditMode)
+        {
+            // Save changes
+            DemandService.UpdateDemand(demand);
+        }
+        isEditMode = !isEditMode;
+    }
+
+    private void CancelEdit()
+    {
+        isEditMode = false;
+        Navigation.NavigateTo($"/demand-overview/{DemandId}", forceLoad: true);
+    }
+    private async Task HandleValidSubmit()
+    {
+        await DemandService.UpdateDemand(demand);
+        isEditMode = false;
+        Navigation.NavigateTo("/demand-list");
+    }
+
+    private void NavigateToList()
+    {
+        Navigation.NavigateTo("/demand-list");
+    }
+}

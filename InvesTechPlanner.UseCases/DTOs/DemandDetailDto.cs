@@ -4,8 +4,10 @@ namespace InvesTechPlanner.UseCases.DTOs
 {
     public class DemandDetailDto
     {
+        [Required(ErrorMessage = "Demand is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Demand.")]
+        public int DemandId { get; set; } = 0;
         public int? DemandDetailsId { get; set; }
-        public int? DemandId { get; set; }
 
         [Required(ErrorMessage = "Title is required.")]
         public string? Title { get; set; }

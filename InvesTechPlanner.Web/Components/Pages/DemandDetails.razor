@@ -18,6 +18,7 @@
             <div class="col-md-12">
                 <label for="DemandId" class="form-label">Select Demand:<span class="text-danger">*</span></label>
                 <InputSelect id="DemandId" @bind-Value="demandDetail.DemandId" class="form-control">
+                    <option value="0">Please select</option> <!-- デフォルトの選択肢を追加 -->
                     @foreach (var demand in demands)
                     {
                         <option value="@demand.DemandId">@demand.Title</option>

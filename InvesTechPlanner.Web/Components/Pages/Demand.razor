@@ -183,7 +183,7 @@
                 <ValidationMessage For="@(() => demand.PlannedEnd)" />
             </div>
             <div class="col-md-4">
-                <label for="FiscalYear" class="form-label">Fiscal Year:<span class="text-danger">*</span></label>
+                <label for="FiscalYear" class="form-label">Fiscal Year:</label>
                 <InputSelect id="FiscalYear" @bind-Value="demand.FiscalYear" class="form-control">
                     @foreach (var year in fiscalYears)
                     {

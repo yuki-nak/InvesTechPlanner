@@ -40,6 +40,40 @@ namespace InvesTechPlanner.UseCases
             await _demandRepository.Add(demand);
         }
 
+        public async Task UpdateDemand(DemandDto demandDto)
+        {
+            var demand = new Demand
+            {
+                DemandId = demandDto.DemandId,
+                Title = demandDto.Title,
+                RequestedDept = demandDto.RequestedDept,
+                RequestedBy = demandDto.RequestedBy,
+                DemandOwner = demandDto.DemandOwner,
+                DemandCategory = demandDto.DemandCategory,
+                Objective = demandDto.Objective,
+                Proposal = demandDto.Proposal,
+                InvestmentDetails = demandDto.InvestmentDetails,
+                BusinessImpactIfNotConducted = demandDto.BusinessImpactIfNotConducted,
+                RiskComment = demandDto.RiskComment,
+                DemandPriority = demandDto.DemandPriority,
+                Assumption = demandDto.Assumption,
+                Dependency = demandDto.Dependency,
+                Status = demandDto.Status,
+                InvestClassification = demandDto.InvestClassification,
+                InvestmentScale = demandDto.InvestmentScale,
+                PMOResponsible = demandDto.PMOResponsible,
+                ITBizPartner = demandDto.ITBizPartner,
+                PlannedStart = demandDto.PlannedStart,
+                PlannedEnd = demandDto.PlannedEnd,
+                FiscalYear = demandDto.FiscalYear,
+                DateUpdated = DateTime.Now,
+                Remarks = demandDto.Remarks,
+                IsInactive = demandDto.IsInactive
+            };
+
+            await _demandRepository.Update(demand);
+        }
+
         public async Task DeleteDemand(int demandId)
         {
             await _demandRepository.Delete(demandId);
@@ -92,6 +126,30 @@ namespace InvesTechPlanner.UseCases
                 InvestmentScale = d.InvestmentScale,
                 DemandPriority = d.DemandPriority
             }).ToList();
+        }
+
+        public async Task<DemandDto?> GetDemandById(int demandId)
+        {
+            var demand = await _demandRepository.GetById(demandId);
+            if (demand == null) return null;
+
+            return new DemandDto
+            {
+                DemandId = demand.DemandId,
+                Title = demand.Title,
+                RequestedDept = demand.RequestedDept,
+                RequestedBy = demand.RequestedBy,
+                DemandOwner = demand.DemandOwner,
+                DemandCategory = demand.DemandCategory,
+                Status = demand.Status,
+                FiscalYear = demand.FiscalYear,
+                Objective = demand.Objective,
+                Proposal = demand.Proposal,
+                InvestmentDetails = demand.InvestmentDetails,
+                BusinessImpactIfNotConducted = demand.BusinessImpactIfNotConducted,
+                RiskComment = demand.RiskComment,
+                Remarks = demand.Remarks
+            };
         }
 
         public async Task<MemoryStream> ExportDemandsToCsv()

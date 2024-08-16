@@ -130,7 +130,11 @@
                     <tr>
                         <td>@demand.DemandId</td>
                         <td>@demand.FiscalYear</td>
-                        <td>@demand.Title</td>
+                        <td>
+                            <a href="@($"demand-overview/{demand.DemandId}")">
+                                @demand.Title
+                            </a>
+                        </td>
                         <td>@demand.DemandCategory</td>
                         <td>@demand.RequestedDept</td>
                         <td>@demand.Status</td>

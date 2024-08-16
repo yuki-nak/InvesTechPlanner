@@ -34,9 +34,9 @@ namespace InvesTechPlanner.UseCases.DTOs
         public string? ITBizPartner { get; set; }
         public DateTime? PlannedStart { get; set; }
         public DateTime? PlannedEnd { get; set; }
-        public int? FiscalYear { get; set; }
+        public string? FiscalYear { get; set; }
         public string? CreatedBy { get; set; }
-        public bool? IsInactive { get; set; }
+        public bool? IsInactive { get; set; } = false;
         public string? Remarks { get; set; }
     }
 }

@@ -23,7 +23,7 @@
         public string? ITBizPartner { get; set; }
         public DateTime? PlannedStart { get; set; }
         public DateTime? PlannedEnd { get; set; }
-        public int? FiscalYear { get; set; }
+        public string? FiscalYear { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime DateUpdated { get; set; } = DateTime.Now;
         public string? CreatedBy { get; set; }
