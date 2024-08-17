@@ -204,10 +204,10 @@
     private void ApplyFilters()
     {
         filteredDemands = demands.Where(d =>
-            (string.IsNullOrEmpty(selectedFiscalYear) || (selectedFiscalYear == "Unknown" && d.FiscalYear == null) || d.FiscalYear.ToString() == selectedFiscalYear) &&
+            (string.IsNullOrEmpty(selectedFiscalYear) || (selectedFiscalYear == "Unknown" && d.FiscalYear == null) || d.FiscalYear?.ToString() == selectedFiscalYear) &&
             (string.IsNullOrEmpty(selectedCategory) || (selectedCategory == "Unknown" && d.DemandCategory == null) || d.DemandCategory == selectedCategory) &&
             (string.IsNullOrEmpty(selectedDept) || (selectedDept == "Unknown" && d.RequestedDept == null) || d.RequestedDept == selectedDept) &&
-             (string.IsNullOrEmpty(selectedStatus) || (selectedStatus == "Unknown" && d.Status == null) || d.Status == selectedStatus) &&
+            (string.IsNullOrEmpty(selectedStatus) || (selectedStatus == "Unknown" && d.Status == null) || d.Status == selectedStatus) &&
             (string.IsNullOrEmpty(selectedScale) || (selectedScale == "Unknown" && d.InvestmentScale == null) || d.InvestmentScale == selectedScale) &&
             (string.IsNullOrEmpty(selectedPriority) || (selectedPriority == "Unknown" && d.DemandPriority == null) || d.DemandPriority == selectedPriority)
         ).ToList();

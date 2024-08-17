@@ -21,7 +21,6 @@ namespace InvesTechPlanner.Infrastructure.Repositories
 
             await connection.ExecuteAsync(insertQuery, demandDetail);
 
-            // History テーブルへの挿入
             const string historyInsertQuery = @"
                 INSERT INTO DemandDetailsHistory (DemandDetailsId, DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, 
                                                   CostType, CurrentCost, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
@@ -33,18 +32,18 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             await connection.ExecuteAsync(historyInsertQuery, demandDetail);
         }
 
-        public async Task<DemandDetail?> GetById(int id)
+        public async Task<DemandDetail?> GetById(int demandDetailsId)
         {
             using var connection = _connectionFactory.CreateConnection();
-            const string query = "SELECT * FROM DemandDetails WHERE DemandDetailsId = @Id";
-            return await connection.QuerySingleOrDefaultAsync<DemandDetail>(query, new { Id = id });
+            const string query = "SELECT * FROM DemandDetails WHERE DemandDetailsId = @DemandDetailsId";
+            return await connection.QuerySingleOrDefaultAsync<DemandDetail>(query, new { DemandDetailsId = demandDetailsId });
         }
 
-        public async Task<IEnumerable<DemandDetail>> GetAll()
+        public async Task<IEnumerable<DemandDetail>> GetDetailedDemandID(int demandId)
         {
             using var connection = _connectionFactory.CreateConnection();
-            const string query = "SELECT * FROM DemandDetails";
-            return await connection.QueryAsync<DemandDetail>(query);
+            const string query = "SELECT * FROM DemandDetails WHERE DemandId = @DemandId";
+            return await connection.QueryAsync<DemandDetail>(query, new { DemandId = demandId });
         }
 
         public async Task Update(DemandDetail demandDetail)
@@ -60,7 +59,6 @@ namespace InvesTechPlanner.Infrastructure.Repositories
 
             await connection.ExecuteAsync(updateQuery, demandDetail);
 
-            // History テーブルへの挿入
             const string historyInsertQuery = @"
                 INSERT INTO DemandDetailsHistory (DemandDetailsId, DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, 
                                                   CostType, CurrentCost, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
@@ -82,7 +80,6 @@ namespace InvesTechPlanner.Infrastructure.Repositories
 
             await connection.ExecuteAsync(updateQuery, new { Id = id });
 
-            // History テーブルへの挿入
             var demandDetail = await GetById(id);
             if (demandDetail != null)
             {

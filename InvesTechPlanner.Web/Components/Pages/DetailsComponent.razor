@@ -1,0 +1,69 @@
+﻿@inject InvesTechPlanner.UseCases.Interfaces.IDemandDetailsService DemandDetailsService
+@using InvesTechPlanner.UseCases.DTOs
+
+<h3>Demand Details</h3>
+
+@if (demandDetails == null)
+{
+    <p>Loading...</p>
+}
+else if (demandDetails.Count == 0)
+{
+    <p>No details available for this Demand.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Details Title</th>
+                <th>Description</th>
+                <th>Spend Dept</th>
+                <th>Expense Type</th>
+                <th>Spend Category</th>
+                <th>Cost Type</th>
+                <th>Current Cost</th>
+                <th>Year 0</th>
+                <th>Year 1</th>
+                <th>Year 2</th>
+                <th>Year 3</th>
+                <th>Year 4</th>
+                <th>Year 5</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in demandDetails)
+            {
+                <tr>
+                    <td>@detail.Title</td>
+                    <td>@detail.Description</td>
+                    <td>@detail.SpendDept</td>
+                    <td>@detail.ExpenseType</td>
+                    <td>@detail.SpendCategory</td>
+                    <td>@detail.CostType</td>
+                    <td>@detail.CurrentCost</td>
+                    <td>@detail.Year0</td>
+                    <td>@detail.Year1</td>
+                    <td>@detail.Year2</td>
+                    <td>@detail.Year3</td>
+                    <td>@detail.Year4</td>
+                    <td>@detail.Year5</td>
+                    <td>@detail.Remarks</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<DemandDetailDto> demandDetails = new();
+
+    [Parameter]
+    public int DemandId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        demandDetails = (await DemandDetailsService.GetDemandDetailsByDemandId(DemandId)).ToList();
+    }
+}
