@@ -1,4 +1,5 @@
 ﻿using InvesTechPlanner.Entities;
+using InvesTechPlanner.UseCases.DTOs;
 
 namespace InvesTechPlanner.UseCases.Interfaces
 {
@@ -9,5 +10,8 @@ namespace InvesTechPlanner.UseCases.Interfaces
         Task Delete(int demandDetailsId);
         Task<DemandDetail?> GetById(int demandDetailsId);
         Task<IEnumerable<DemandDetail>> GetDetailedDemandID(int demandId);
+        Task<IEnumerable<DemandDetail>> GetDemandDetailsByDemandId(int demandId);
+        Task<MemoryStream> ExportDemandDetailsToCsv(int demandId);
+        Task<Dictionary<string, Dictionary<string, SummaryDto>>> GetSummaryByCostType(int demandId);
     }
 }

@@ -5,6 +5,7 @@
 @inject IJSRuntime JSRuntime
 @using InvesTechPlanner.UseCases.DTOs
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Demand List</h2>
@@ -35,7 +36,7 @@
     <!-- Filter and CSV download button -->
     <div class="col-md-2 d-flex align-items-end">
         <button class="btn btn-primary me-2" @onclick="ApplyFilters" style="white-space: nowrap;">Apply Filters</button>
-        <button class="btn btn-secondary" @onclick="ExportCsv" style="white-space: nowrap;">Export to CSV</button>
+        <button class="btn btn-secondary" @onclick="ExportCsv" style="white-space: nowrap;"><i class="fas fa-file-csv"></i> Export to CSV</button>
     </div>
 
     <!-- Filter Section -->

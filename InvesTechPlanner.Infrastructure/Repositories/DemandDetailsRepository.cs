@@ -1,6 +1,10 @@
-﻿using Dapper;
+﻿using CsvHelper;
+using Dapper;
 using InvesTechPlanner.Entities;
+using InvesTechPlanner.UseCases.DTOs;
 using InvesTechPlanner.UseCases.Interfaces;
+using System.Globalization;
+using System.Text;
 
 namespace InvesTechPlanner.Infrastructure.Repositories
 {
@@ -43,6 +47,13 @@ namespace InvesTechPlanner.Infrastructure.Repositories
         {
             using var connection = _connectionFactory.CreateConnection();
             const string query = "SELECT * FROM DemandDetails WHERE DemandId = @DemandId";
+            return await connection.QueryAsync<DemandDetail>(query, new { DemandId = demandId });
+        }
+
+        public async Task<IEnumerable<DemandDetail>> GetDemandDetailsByDemandId(int demandId)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var query = "SELECT * FROM DemandDetails WHERE DemandId = @DemandId AND IsInactive != 1";
             return await connection.QueryAsync<DemandDetail>(query, new { DemandId = demandId });
         }
 
@@ -94,5 +105,51 @@ namespace InvesTechPlanner.Infrastructure.Repositories
                 await connection.ExecuteAsync(historyInsertQuery, demandDetail);
             }
         }
+
+        public async Task<MemoryStream> ExportDemandDetailsToCsv(int demandId)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = "SELECT * FROM DemandDetails WHERE DemandId = @DemandId AND IsInactive = 0";
+            var demandDetails = await connection.QueryAsync<DemandDetail>(sql, new { DemandId = demandId });
+
+            using var memoryStream = new MemoryStream();
+            using var writer = new StreamWriter(memoryStream, Encoding.UTF8);
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            csv.WriteRecords(demandDetails);
+            writer.Flush();
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
+        public async Task<Dictionary<string, Dictionary<string, SummaryDto>>> GetSummaryByCostType(int demandId)
+        {
+            var demandDetails = await GetDemandDetailsByDemandId(demandId);
+
+            var summaryData = demandDetails
+                .GroupBy(d => d.CostType)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.GroupBy(d => d.ExpenseType)
+                          .ToDictionary(
+                              e => e.Key,
+                              e => new SummaryDto
+                              {
+                                  Current = e.Sum(d => d.CurrentCost ?? 0),
+                                  Year0 = e.Sum(d => d.Year0 ?? 0),
+                                  Year1 = e.Sum(d => d.Year1 ?? 0),
+                                  Year2 = e.Sum(d => d.Year2 ?? 0),
+                                  Year3 = e.Sum(d => d.Year3 ?? 0),
+                                  Year4 = e.Sum(d => d.Year4 ?? 0),
+                                  Year5 = e.Sum(d => d.Year5 ?? 0),
+                              }
+                          )
+                );
+
+            return summaryData;
+        }
+
+
     }
 }

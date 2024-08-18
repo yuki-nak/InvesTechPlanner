@@ -115,5 +115,41 @@ namespace InvesTechPlanner.UseCases
                 IsInactive = d.IsInactive
             }).ToList();
         }
+        public async Task<MemoryStream> ExportDemandDetailsToCsv(int demandId)
+        {
+            return await _demandDetailsRepository.ExportDemandDetailsToCsv(demandId);
+        }
+
+        public async Task<Dictionary<string, Dictionary<string, SummaryDto>>> GetSummaryByCostType(int demandId)
+        {
+            return await _demandDetailsRepository.GetSummaryByCostType(demandId);
+        }
+
+        public int? CalculatePaybackPeriod(SummaryDto summary)
+        {
+            decimal cumulativeCashFlow = 0;
+
+            decimal[] yearlyInvestments = {
+            summary.Year0,
+            summary.Year1,
+            summary.Year2,
+            summary.Year3,
+            summary.Year4,
+            summary.Year5
+        };
+
+            for (int year = 0; year < yearlyInvestments.Length; year++)
+            {
+                cumulativeCashFlow += yearlyInvestments[year] - summary.Current;
+
+                if (cumulativeCashFlow >= 0)
+                {
+                    return year; // 累積キャッシュフローがゼロまたは正になる最初の年を返す
+                }
+            }
+
+            return null; // 期間内に回収されない場合
+        }
+
     }
 }

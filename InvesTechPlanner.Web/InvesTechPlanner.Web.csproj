@@ -12,4 +12,5 @@
     <ProjectReference Include="..\InvesTechPlanner.UseCases\InvesTechPlanner.UseCases.csproj" />
   </ItemGroup>
 
+
 </Project>

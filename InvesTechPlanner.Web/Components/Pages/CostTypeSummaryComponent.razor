@@ -1,0 +1,97 @@
+﻿@inject InvesTechPlanner.UseCases.Interfaces.IDemandDetailsService DemandDetailsService
+@using InvesTechPlanner.UseCases.DTOs
+
+@if (summaryData == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var costType in summaryData.Keys)
+    {
+        var totalInvest = summaryData[costType].Values.Sum(x => x.Year0 + x.Year1 + x.Year2 + x.Year3 + x.Year4 + x.Year5);
+        var totalDelta = summaryData[costType].Values.Sum(x => x.Current - (x.Year0 + x.Year1 + x.Year2 + x.Year3 + x.Year4 + x.Year5));
+        var roi = totalInvest != 0 ? (totalDelta / totalInvest) * 100 : 0;
+
+        // Payback Periodを計算
+        var totalSummary = new SummaryDto
+                    {
+                        Current = summaryData[costType].Values.Sum(x => x.Current),
+                        Year0 = summaryData[costType].Values.Sum(x => x.Year0),
+                        Year1 = summaryData[costType].Values.Sum(x => x.Year1),
+                        Year2 = summaryData[costType].Values.Sum(x => x.Year2),
+                        Year3 = summaryData[costType].Values.Sum(x => x.Year3),
+                        Year4 = summaryData[costType].Values.Sum(x => x.Year4),
+                        Year5 = summaryData[costType].Values.Sum(x => x.Year5)
+                    };
+        var paybackPeriod = DemandDetailsService.CalculatePaybackPeriod(totalSummary);
+
+        <h4>@costType</h4>
+        <p style="color: red;">ROI: @roi.ToString("F2")%</p> <!-- ROIを赤字で表示 -->
+        <p style="color: red;">Payback Period: @(paybackPeriod.HasValue ? $"{paybackPeriod.Value} years" : "Not Recoverable")</p>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Expense Type</th>
+                    <th>Current</th>
+                    <th>Year 0</th>
+                    <th>Year 1</th>
+                    <th>Year 2</th>
+                    <th>Year 3</th>
+                    <th>Year 4</th>
+                    <th>Year 5</th>
+                    <th>Invest Total</th>
+                    <th>Delta</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var expenseType in summaryData[costType].Keys)
+                {
+                    var data = summaryData[costType][expenseType];
+                    var investTotal = data.Year0 + data.Year1 + data.Year2 + data.Year3 + data.Year4 + data.Year5;
+                    var delta = data.Current - investTotal;
+
+                    <tr>
+                        <td>@expenseType</td>
+                        <td>@data.Current</td>
+                        <td>@data.Year0</td>
+                        <td>@data.Year1</td>
+                        <td>@data.Year2</td>
+                        <td>@data.Year3</td>
+                        <td>@data.Year4</td>
+                        <td>@data.Year5</td>
+                        <td>@investTotal</td>
+                        <td>@delta</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Sub Total</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Current)</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Year0)</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Year1)</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Year2)</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Year3)</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Year4)</th>
+                    <th>@summaryData[costType].Values.Sum(x => x.Year5)</th>
+                    <th>@totalInvest</th>
+                    <th>@totalDelta</th>
+                </tr>
+            </tfoot>
+        </table>
+    }
+}
+
+@code {
+    [Parameter]
+    public int DemandId { get; set; }
+
+    private Dictionary<string, Dictionary<string, SummaryDto>> summaryData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        summaryData = await DemandDetailsService.GetSummaryByCostType(DemandId);
+    }
+}

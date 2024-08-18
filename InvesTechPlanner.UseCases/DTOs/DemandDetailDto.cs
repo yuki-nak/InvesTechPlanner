@@ -33,7 +33,7 @@ namespace InvesTechPlanner.UseCases.DTOs
         public decimal? Year4 { get; set; }
         public decimal? Year5 { get; set; }
         public string? CreatedBy { get; set; }
-        public bool? IsInactive { get; set; }
+        public bool? IsInactive { get; set; } = false;
         public string? Remarks { get; set; }
     }
 }

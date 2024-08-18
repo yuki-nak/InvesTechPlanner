@@ -1,12 +1,18 @@
 ﻿@inject InvesTechPlanner.UseCases.Interfaces.IDemandDetailsService DemandDetailsService
 @inject InvesTechPlanner.Web.Services.OptionsService OptionsService
 @inject InvesTechPlanner.UseCases.Interfaces.IDemandService DemandService
+@inject IJSRuntime JSRuntime
 @using InvesTechPlanner.UseCases.DTOs
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <h3>Demand Details</h3>
-
+<!-- Export to CSV Button -->
+<div class="mb-3">
+    <button class="btn btn-secondary" @onclick="ExportCsv">
+        <i class="fas fa-file-csv"></i> Export to CSV
+    </button>
+</div>
 
 @if (showDeleteConfirmation)
 {
@@ -300,5 +306,20 @@ else
         await DemandDetailsService.UpdateDemandDetail(editingDetail);
         await LoadDemandDetails();
         showEditModal = false;
+    }
+
+    private async Task ExportCsv()
+    {
+        try
+        {
+            var memoryStream = await DemandDetailsService.ExportDemandDetailsToCsv(DemandId);
+            var fileName = $"demand_details_{DemandId}.csv";
+            var base64 = Convert.ToBase64String(memoryStream.ToArray());
+            await JSRuntime.InvokeVoidAsync("downloadFile", fileName, base64);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"CSVエクスポートエラー: {ex.Message}");
+        }
     }
 }
