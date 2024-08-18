@@ -1,7 +1,173 @@
 ﻿@inject InvesTechPlanner.UseCases.Interfaces.IDemandDetailsService DemandDetailsService
+@inject InvesTechPlanner.Web.Services.OptionsService OptionsService
+@inject InvesTechPlanner.UseCases.Interfaces.IDemandService DemandService
 @using InvesTechPlanner.UseCases.DTOs
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 <h3>Demand Details</h3>
+
+
+@if (showDeleteConfirmation)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="close" @onclick="CloseDeleteConfirmationModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete '@deleteCandidate.Title'?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseDeleteConfirmationModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" @onclick="DeleteDetailConfirmed">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (showEditModal)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Demand Detail</h5>
+                    <button type="button" class="close" @onclick="CloseEditModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@editingDetail" OnValidSubmit="HandleEditSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="Title" class="form-label">Details Title:<span class="text-danger">*</span></label>
+                                <InputText id="Title" @bind-Value="editingDetail.Title" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Title)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="Description" class="form-label">Description:</label>
+                                <InputTextArea id="Description" @bind-Value="editingDetail.Description" class="form-control" rows="4" />
+                                <ValidationMessage For="@(() => editingDetail.Description)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="SpendDept" class="form-label">Spend Dept:</label>
+                                <InputSelect id="SpendDept" @bind-Value="editingDetail.SpendDept" class="form-control">
+                                    @foreach (var dept in spendDepts)
+                                    {
+                                        <option value="@dept">@dept</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => editingDetail.SpendDept)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ExpenseType" class="form-label">Expense Type:</label>
+                                <InputSelect id="ExpenseType" @bind-Value="editingDetail.ExpenseType" class="form-control">
+                                    @foreach (var expense in expenseTypes)
+                                    {
+                                        <option value="@expense">@expense</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => editingDetail.ExpenseType)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="SpendCategory" class="form-label">Spend Category:</label>
+                                <InputSelect id="SpendCategory" @bind-Value="editingDetail.SpendCategory" class="form-control">
+                                    @foreach (var category in spendCategories)
+                                    {
+                                        <option value="@category">@category</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => editingDetail.SpendCategory)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="CostType" class="form-label">Cost Type:</label>
+                                <InputSelect id="CostType" @bind-Value="editingDetail.CostType" class="form-control">
+                                    @foreach (var cost in costTypes)
+                                    {
+                                        <option value="@cost">@cost</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => editingDetail.CostType)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="CurrentCost" class="form-label">Current Cost:</label>
+                                <InputNumber id="CurrentCost" @bind-Value="editingDetail.CurrentCost" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.CurrentCost)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="Year0" class="form-label">Year 0:</label>
+                                <InputNumber id="Year0" @bind-Value="editingDetail.Year0" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Year0)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Year1" class="form-label">Year 1:</label>
+                                <InputNumber id="Year1" @bind-Value="editingDetail.Year1" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Year1)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Year2" class="form-label">Year 2:</label>
+                                <InputNumber id="Year2" @bind-Value="editingDetail.Year2" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Year2)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Year3" class="form-label">Year 3:</label>
+                                <InputNumber id="Year3" @bind-Value="editingDetail.Year3" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Year3)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Year4" class="form-label">Year 4:</label>
+                                <InputNumber id="Year4" @bind-Value="editingDetail.Year4" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Year4)" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Year5" class="form-label">Year 5:</label>
+                                <InputNumber id="Year5" @bind-Value="editingDetail.Year5" class="form-control" />
+                                <ValidationMessage For="@(() => editingDetail.Year5)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="Remarks" class="form-label">Remarks:</label>
+                                <InputTextArea id="Remarks" @bind-Value="editingDetail.Remarks" class="form-control" rows="4" />
+                                <ValidationMessage For="@(() => editingDetail.Remarks)" />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" @onclick="CloseEditModal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @if (demandDetails == null)
 {
@@ -17,19 +183,20 @@ else
         <thead>
             <tr>
                 <th>Details Title</th>
-                <th>Description</th>
+                <!-- Description -->
                 <th>Spend Dept</th>
                 <th>Expense Type</th>
-                <th>Spend Category</th>
-                <th>Cost Type</th>
-                <th>Current Cost</th>
+                <!-- Spend Category -->
+                <!-- Cost Type -->
+                <th>Current</th>
                 <th>Year 0</th>
                 <th>Year 1</th>
                 <th>Year 2</th>
                 <th>Year 3</th>
                 <th>Year 4</th>
                 <th>Year 5</th>
-                <th>Remarks</th>
+                <!-- Remarks -->
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -37,11 +204,11 @@ else
             {
                 <tr>
                     <td>@detail.Title</td>
-                    <td>@detail.Description</td>
+                    <!-- detail.Description -->
                     <td>@detail.SpendDept</td>
                     <td>@detail.ExpenseType</td>
-                    <td>@detail.SpendCategory</td>
-                    <td>@detail.CostType</td>
+                    <!-- detail.SpendCategory -->
+                    <!-- detail.CostType -->
                     <td>@detail.CurrentCost</td>
                     <td>@detail.Year0</td>
                     <td>@detail.Year1</td>
@@ -49,7 +216,15 @@ else
                     <td>@detail.Year3</td>
                     <td>@detail.Year4</td>
                     <td>@detail.Year5</td>
-                    <td>@detail.Remarks</td>
+                    <!-- detail.Remarks -->
+                    <td>
+                        <button class="btn btn-primary btn-sm me-2" @onclick="() => EditDetail(detail)">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => ConfirmDelete(detail)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -58,12 +233,72 @@ else
 
 @code {
     private List<DemandDetailDto> demandDetails = new();
+    private DemandDetailDto deleteCandidate = new();
+    private DemandDetailDto editingDetail = new();
+    private bool showDeleteConfirmation = false;
+    private bool showEditModal = false;
+
+    private List<string> spendDepts = new();
+    private List<string> expenseTypes = new();
+    private List<string> spendCategories = new();
+    private List<string> costTypes = new();
 
     [Parameter]
     public int DemandId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        demandDetails = (await DemandDetailsService.GetDemandDetailsByDemandId(DemandId)).ToList();
+        await LoadDemandDetails();
+        var options = await OptionsService.GetOptionsAsync("options_demand_details.json");
+
+        spendDepts = options.GetValueOrDefault("SpendDept", new List<string>());
+        expenseTypes = options.GetValueOrDefault("ExpenseType", new List<string>());
+        spendCategories = options.GetValueOrDefault("SpendCategory", new List<string>());
+        costTypes = options.GetValueOrDefault("CostType", new List<string>());
+    }
+
+    private async Task LoadDemandDetails()
+    {
+        var details = await DemandDetailsService.GetDemandDetailsByDemandId(DemandId);
+        demandDetails = details.Where(d => d.IsInactive != true).ToList();
+    }
+
+    private void ConfirmDelete(DemandDetailDto detail)
+    {
+        deleteCandidate = detail;
+        showDeleteConfirmation = true;
+    }
+
+    private void CloseDeleteConfirmationModal()
+    {
+        showDeleteConfirmation = false;
+    }
+
+    private async Task DeleteDetailConfirmed()
+    {
+        if (deleteCandidate.DemandDetailsId.HasValue)
+        {
+            await DemandDetailsService.DeleteDemandDetail(deleteCandidate.DemandDetailsId.Value);
+            await LoadDemandDetails();
+            showDeleteConfirmation = false;
+        }
+    }
+
+    private void EditDetail(DemandDetailDto detail)
+    {
+        editingDetail = detail;
+        showEditModal = true;
+    }
+
+    private void CloseEditModal()
+    {
+        showEditModal = false;
+    }
+
+    private async Task HandleEditSubmit()
+    {
+        await DemandDetailsService.UpdateDemandDetail(editingDetail);
+        await LoadDemandDetails();
+        showEditModal = false;
     }
 }
