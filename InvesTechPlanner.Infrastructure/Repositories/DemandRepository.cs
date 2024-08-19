@@ -22,11 +22,11 @@ namespace InvesTechPlanner.Infrastructure.Repositories
                 INSERT INTO Demand (Title, RequestedDept, RequestedBy, DemandOwner, DemandCategory, Objective, Proposal, InvestmentDetails, 
                                     BusinessImpactIfNotConducted, RiskComment, DemandPriority, Assumption, Dependency, Status, InvestClassification, 
                                     InvestmentScale, PMOResponsible, ITBizPartner, PlannedStart, PlannedEnd, FiscalYear, DateCreated, DateUpdated, 
-                                    CreatedBy, IsInactive, Remarks)
+                                    CreatedBy, IsInactive, Remarks,DocUrl)
                 VALUES (@Title, @RequestedDept, @RequestedBy, @DemandOwner, @DemandCategory, @Objective, @Proposal, @InvestmentDetails, 
                         @BusinessImpactIfNotConducted, @RiskComment, @DemandPriority, @Assumption, @Dependency, @Status, @InvestClassification, 
                         @InvestmentScale, @PMOResponsible, @ITBizPartner, @PlannedStart, @PlannedEnd, @FiscalYear, @DateCreated, 
-                        @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
+                        @DateUpdated, @CreatedBy, @IsInactive, @Remarks,@DocUrl)";
 
             demand.IsInactive = false; // IsInactiveを常にfalseに設定
             await connection.ExecuteAsync(insertQuery, demand);
@@ -95,7 +95,7 @@ namespace InvesTechPlanner.Infrastructure.Repositories
                     Assumption = @Assumption, Dependency = @Dependency, Status = @Status, InvestClassification = @InvestClassification, 
                     InvestmentScale = @InvestmentScale, PMOResponsible = @PMOResponsible, ITBizPartner = @ITBizPartner, 
                     PlannedStart = @PlannedStart, PlannedEnd = @PlannedEnd, FiscalYear = @FiscalYear, DateUpdated = @DateUpdated, 
-                    CreatedBy = @CreatedBy, IsInactive = @IsInactive, Remarks = @Remarks
+                    CreatedBy = @CreatedBy, IsInactive = @IsInactive, Remarks = @Remarks, DocUrl = @DocUrl
                 WHERE DemandID = @DemandID";
 
             await connection.ExecuteAsync(updateQuery, demand);
@@ -125,11 +125,11 @@ namespace InvesTechPlanner.Infrastructure.Repositories
                 INSERT INTO DemandHistory (DemandID, Title, RequestedDept, RequestedBy, DemandOwner, DemandCategory, Objective, Proposal, 
                                            InvestmentDetails, BusinessImpactIfNotConducted, RiskComment, DemandPriority, Assumption, Dependency, 
                                            Status, InvestClassification, InvestmentScale, PMOResponsible, ITBizPartner, PlannedStart, PlannedEnd, FiscalYear, 
-                                           DateCreated, DateUpdated, CreatedBy, IsInactive, Remarks)
+                                           DateCreated, DateUpdated, CreatedBy, IsInactive, Remarks,DocUrl)
                 VALUES (@DemandID, @Title, @RequestedDept, @RequestedBy, @DemandOwner, @DemandCategory, @Objective, @Proposal, 
                         @InvestmentDetails, @BusinessImpactIfNotConducted, @RiskComment, @DemandPriority, @Assumption, @Dependency, 
                         @Status, @InvestClassification, @InvestmentScale, @PMOResponsible, @ITBizPartner, @PlannedStart, @PlannedEnd, @FiscalYear, 
-                        @DateCreated, @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
+                        @DateCreated, @DateUpdated, @CreatedBy, @IsInactive, @Remarks, @DocUrl)";
 
             await connection.ExecuteAsync(historyInsertQuery, demand);
         }

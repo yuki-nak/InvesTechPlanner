@@ -28,5 +28,11 @@
     "2024",
     "2025",
     "2026"
+  ],
+  "Status": [
+    "Open",
+    "Closed",
+    "On Hold",
+    "Cancelled"
   ]
 }

@@ -34,5 +34,11 @@
     "",
     "Direct (Hard saving)",
     "Indirect (Soft saving)"
+  ],
+  "ScenarioType": [
+    "",
+    "Current",
+    "Invested"
   ]
+
 }

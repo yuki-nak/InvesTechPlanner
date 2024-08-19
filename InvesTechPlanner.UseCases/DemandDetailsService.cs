@@ -19,7 +19,7 @@ namespace InvesTechPlanner.UseCases
                 ExpenseType = demandDetailDto.ExpenseType,
                 SpendCategory = demandDetailDto.SpendCategory,
                 CostType = demandDetailDto.CostType,
-                CurrentCost = demandDetailDto.CurrentCost,
+                ScenarioType = demandDetailDto.ScenarioType,
                 Year0 = demandDetailDto.Year0,
                 Year1 = demandDetailDto.Year1,
                 Year2 = demandDetailDto.Year2,
@@ -45,7 +45,7 @@ namespace InvesTechPlanner.UseCases
                 ExpenseType = demandDetailDto.ExpenseType,
                 SpendCategory = demandDetailDto.SpendCategory,
                 CostType = demandDetailDto.CostType,
-                CurrentCost = demandDetailDto.CurrentCost,
+                ScenarioType = demandDetailDto.ScenarioType,
                 Year0 = demandDetailDto.Year0,
                 Year1 = demandDetailDto.Year1,
                 Year2 = demandDetailDto.Year2,
@@ -79,7 +79,7 @@ namespace InvesTechPlanner.UseCases
                 ExpenseType = d.ExpenseType,
                 SpendCategory = d.SpendCategory,
                 CostType = d.CostType,
-                CurrentCost = d.CurrentCost,
+                ScenarioType = d.ScenarioType,
                 Year0 = d.Year0,
                 Year1 = d.Year1,
                 Year2 = d.Year2,
@@ -103,8 +103,8 @@ namespace InvesTechPlanner.UseCases
                 SpendDept = d.SpendDept,
                 ExpenseType = d.ExpenseType,
                 SpendCategory = d.SpendCategory,
-                CostType = d.CostType,
-                CurrentCost = d.CurrentCost,
+                CostType= d.CostType,
+                ScenarioType = d.ScenarioType,
                 Year0 = d.Year0,
                 Year1 = d.Year1,
                 Year2 = d.Year2,
@@ -120,36 +120,59 @@ namespace InvesTechPlanner.UseCases
             return await _demandDetailsRepository.ExportDemandDetailsToCsv(demandId);
         }
 
-        public async Task<Dictionary<string, Dictionary<string, SummaryDto>>> GetSummaryByCostType(int demandId)
+        public async Task<Dictionary<string, Dictionary<string, Dictionary<string, SummaryDto>>>> GetSummaryByScenarioAndCostType(int demandId)
         {
-            return await _demandDetailsRepository.GetSummaryByCostType(demandId);
+            return await _demandDetailsRepository.GetSummaryByScenarioAndCostType(demandId);
         }
 
-        public int? CalculatePaybackPeriod(SummaryDto summary)
+        public decimal? CalculatePaybackPeriod(SummaryDto investedSummary, SummaryDto currentSummary)
         {
             decimal cumulativeCashFlow = 0;
+            decimal previousCumulativeCashFlow = 0;
 
             decimal[] yearlyInvestments = {
-            summary.Year0,
-            summary.Year1,
-            summary.Year2,
-            summary.Year3,
-            summary.Year4,
-            summary.Year5
-        };
+        investedSummary.Year0,
+        investedSummary.Year1,
+        investedSummary.Year2,
+        investedSummary.Year3,
+        investedSummary.Year4,
+        investedSummary.Year5
+    };
+
+            decimal[] yearlySavings = {
+        currentSummary.Year0,
+        currentSummary.Year1,
+        currentSummary.Year2,
+        currentSummary.Year3,
+        currentSummary.Year4,
+        currentSummary.Year5
+    };
 
             for (int year = 0; year < yearlyInvestments.Length; year++)
             {
-                cumulativeCashFlow += yearlyInvestments[year] - summary.Current;
+                cumulativeCashFlow += yearlySavings[year] - yearlyInvestments[year];
 
                 if (cumulativeCashFlow >= 0)
                 {
-                    return year; // 累積キャッシュフローがゼロまたは正になる最初の年を返す
+                    if (year == 0)
+                    {
+                        return 0; // 最初の年で回収
+                    }
+
+                    // 部分的な年の計算
+                    decimal remainingCashFlow = previousCumulativeCashFlow < 0 ? -previousCumulativeCashFlow : 0;
+                    decimal additionalYears = remainingCashFlow / (yearlySavings[year] - yearlyInvestments[year]);
+
+                    return year + Math.Round(additionalYears, 1); // 小数点第一位まで計算
                 }
+
+                previousCumulativeCashFlow = cumulativeCashFlow;
             }
 
             return null; // 期間内に回収されない場合
         }
+
+
 
     }
 }

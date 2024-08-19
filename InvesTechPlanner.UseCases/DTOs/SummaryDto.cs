@@ -2,7 +2,6 @@
 {
     public class SummaryDto
     {
-        public decimal Current { get; set; }
         public decimal Year0 { get; set; }
         public decimal Year1 { get; set; }
         public decimal Year2 { get; set; }

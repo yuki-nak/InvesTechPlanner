@@ -123,33 +123,35 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             return memoryStream;
         }
 
-        public async Task<Dictionary<string, Dictionary<string, SummaryDto>>> GetSummaryByCostType(int demandId)
+        public async Task<Dictionary<string, Dictionary<string, Dictionary<string, SummaryDto>>>> GetSummaryByScenarioAndCostType(int demandId)
         {
             var demandDetails = await GetDemandDetailsByDemandId(demandId);
 
             var summaryData = demandDetails
-                .GroupBy(d => d.CostType)
+                .GroupBy(d => d.ScenarioType ?? "Unknown")  // Null の場合にデフォルト値 "Unknown" を使用
                 .ToDictionary(
-                    g => g.Key,
-                    g => g.GroupBy(d => d.ExpenseType)
+                    g => g.Key,  // ここでキーが null にならないことが保証される
+                    g => g.GroupBy(d => d.CostType ?? "Unknown")
                           .ToDictionary(
-                              e => e.Key,
-                              e => new SummaryDto
-                              {
-                                  Current = e.Sum(d => d.CurrentCost ?? 0),
-                                  Year0 = e.Sum(d => d.Year0 ?? 0),
-                                  Year1 = e.Sum(d => d.Year1 ?? 0),
-                                  Year2 = e.Sum(d => d.Year2 ?? 0),
-                                  Year3 = e.Sum(d => d.Year3 ?? 0),
-                                  Year4 = e.Sum(d => d.Year4 ?? 0),
-                                  Year5 = e.Sum(d => d.Year5 ?? 0),
-                              }
+                              c => c.Key,
+                              c => c.GroupBy(d => d.ExpenseType ?? "Unknown")
+                                    .ToDictionary(
+                                        e => e.Key,
+                                        e => new SummaryDto
+                                        {
+                                            Year0 = e.Sum(d => d.Year0 ?? 0),
+                                            Year1 = e.Sum(d => d.Year1 ?? 0),
+                                            Year2 = e.Sum(d => d.Year2 ?? 0),
+                                            Year3 = e.Sum(d => d.Year3 ?? 0),
+                                            Year4 = e.Sum(d => d.Year4 ?? 0),
+                                            Year5 = e.Sum(d => d.Year5 ?? 0),
+                                        }
+                                    )
                           )
                 );
 
+
             return summaryData;
         }
-
-
     }
 }

@@ -25,7 +25,8 @@ namespace InvesTechPlanner.UseCases.DTOs
 
         [Required(ErrorMessage = "Cost Type is required.")]
         public string? CostType { get; set; }
-        public decimal? CurrentCost { get; set; }
+        [Required(ErrorMessage = "Scenario Type is required.")]
+        public string? ScenarioType { get; set; }
         public decimal? Year0 { get; set; }
         public decimal? Year1 { get; set; }
         public decimal? Year2 { get; set; }

@@ -81,6 +81,20 @@
                                 <ValidationMessage For="@(() => editingDetail.SpendDept)" />
                             </div>
                             <div class="col-md-6">
+                                <label for="ScenarioType" class="form-label">Scenario Type:</label>
+                                <InputSelect id="ScenarioType" @bind-Value="editingDetail.ScenarioType" class="form-control">
+                                    @foreach (var scenarioType in scenarioTypes)
+                                    {
+                                        <option value="@scenarioType">@scenarioType</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => editingDetail.ScenarioType)" />
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="ExpenseType" class="form-label">Expense Type:</label>
                                 <InputSelect id="ExpenseType" @bind-Value="editingDetail.ExpenseType" class="form-control">
                                     @foreach (var expense in expenseTypes)
@@ -90,9 +104,6 @@
                                 </InputSelect>
                                 <ValidationMessage For="@(() => editingDetail.ExpenseType)" />
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="SpendCategory" class="form-label">Spend Category:</label>
                                 <InputSelect id="SpendCategory" @bind-Value="editingDetail.SpendCategory" class="form-control">
@@ -112,14 +123,6 @@
                                     }
                                 </InputSelect>
                                 <ValidationMessage For="@(() => editingDetail.CostType)" />
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="CurrentCost" class="form-label">Current Cost:</label>
-                                <InputNumber id="CurrentCost" @bind-Value="editingDetail.CurrentCost" class="form-control" />
-                                <ValidationMessage For="@(() => editingDetail.CurrentCost)" />
                             </div>
                         </div>
 
@@ -194,7 +197,7 @@ else
                 <th>Expense Type</th>
                 <!-- Spend Category -->
                 <!-- Cost Type -->
-                <th>Current</th>
+                <th>Scenario</th>
                 <th>Year 0</th>
                 <th>Year 1</th>
                 <th>Year 2</th>
@@ -215,13 +218,13 @@ else
                     <td>@detail.ExpenseType</td>
                     <!-- detail.SpendCategory -->
                     <!-- detail.CostType -->
-                    <td>@detail.CurrentCost</td>
-                    <td>@detail.Year0</td>
-                    <td>@detail.Year1</td>
-                    <td>@detail.Year2</td>
-                    <td>@detail.Year3</td>
-                    <td>@detail.Year4</td>
-                    <td>@detail.Year5</td>
+                    <td>@detail.ScenarioType</td>
+                    <td>@(detail.Year0?.ToString("N0") ?? "0")</td>
+                    <td>@(detail.Year1?.ToString("N0") ?? "0")</td>
+                    <td>@(detail.Year2?.ToString("N0") ?? "0")</td>
+                    <td>@(detail.Year3?.ToString("N0") ?? "0")</td>
+                    <td>@(detail.Year4?.ToString("N0") ?? "0")</td>
+                    <td>@(detail.Year5?.ToString("N0") ?? "0")</td>
                     <!-- detail.Remarks -->
                     <td>
                         <button class="btn btn-primary btn-sm me-2" @onclick="() => EditDetail(detail)">
@@ -248,6 +251,7 @@ else
     private List<string> expenseTypes = new();
     private List<string> spendCategories = new();
     private List<string> costTypes = new();
+    private List<string> scenarioTypes = new();
 
     [Parameter]
     public int DemandId { get; set; }
@@ -261,6 +265,7 @@ else
         expenseTypes = options.GetValueOrDefault("ExpenseType", new List<string>());
         spendCategories = options.GetValueOrDefault("SpendCategory", new List<string>());
         costTypes = options.GetValueOrDefault("CostType", new List<string>());
+        scenarioTypes = options.GetValueOrDefault("ScenarioType", new List<string>());
     }
 
     private async Task LoadDemandDetails()

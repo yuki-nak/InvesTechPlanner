@@ -29,5 +29,7 @@
         public string? CreatedBy { get; set; }
         public bool? IsInactive { get; set; }
         public string? Remarks { get; set; }
+
+        public string? DocUrl { get; set; }
     }
 }

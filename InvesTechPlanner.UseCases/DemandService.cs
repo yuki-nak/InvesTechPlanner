@@ -35,7 +35,8 @@ namespace InvesTechPlanner.UseCases
                 FiscalYear = demandDto.FiscalYear,
                 CreatedBy = demandDto.CreatedBy,
                 IsInactive = demandDto.IsInactive,
-                Remarks = demandDto.Remarks
+                Remarks = demandDto.Remarks,
+                DocUrl = demandDto.DocUrl
             };
             await _demandRepository.Add(demand);
         }
@@ -68,7 +69,8 @@ namespace InvesTechPlanner.UseCases
                 FiscalYear = demandDto.FiscalYear,
                 DateUpdated = DateTime.Now,
                 Remarks = demandDto.Remarks,
-                IsInactive = demandDto.IsInactive
+                IsInactive = demandDto.IsInactive,
+                DocUrl = demandDto.DocUrl
             };
 
             await _demandRepository.Update(demand);
@@ -91,7 +93,8 @@ namespace InvesTechPlanner.UseCases
                 RequestedDept = d.RequestedDept,
                 Status = d.Status,
                 InvestmentScale = d.InvestmentScale,
-                DemandPriority = d.DemandPriority
+                DemandPriority = d.DemandPriority,
+                DocUrl = d.DocUrl
             }).ToList();
         }
 
@@ -148,7 +151,8 @@ namespace InvesTechPlanner.UseCases
                 InvestmentDetails = demand.InvestmentDetails,
                 BusinessImpactIfNotConducted = demand.BusinessImpactIfNotConducted,
                 RiskComment = demand.RiskComment,
-                Remarks = demand.Remarks
+                Remarks = demand.Remarks,
+                DocUrl = demand.DocUrl
             };
         }
 

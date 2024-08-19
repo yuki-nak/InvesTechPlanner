@@ -38,5 +38,6 @@ namespace InvesTechPlanner.UseCases.DTOs
         public string? CreatedBy { get; set; }
         public bool? IsInactive { get; set; } = false;
         public string? Remarks { get; set; }
+        public string? DocUrl { get; set; }
     }
 }

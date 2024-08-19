@@ -46,9 +46,9 @@
             </div>
         </div>
 
-        <!-- Spend Dept, Expense Type -->
+        <!-- Spend Dept, Scenario Type, Expense Type -->
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-2">
                 <label for="SpendDept" class="form-label">Spend Dept:</label>
                 <InputSelect id="SpendDept" @bind-Value="demandDetail.SpendDept" class="form-control">
                     @foreach (var dept in spendDepts)
@@ -58,7 +58,17 @@
                 </InputSelect>
                 <ValidationMessage For="@(() => demandDetail.SpendDept)" />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-2">
+                <label for="ScenarioType" class="form-label">Scenario Type:</label>
+                <InputSelect id="ScenarioType" @bind-Value="demandDetail.ScenarioType" class="form-control">
+                    @foreach (var scenarioType in scenarioTypes)
+                    {
+                        <option value="@scenarioType">@scenarioType</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.CostType)" />
+            </div>
+            <div class="col-md-2">
                 <label for="ExpenseType" class="form-label">Expense Type:</label>
                 <InputSelect id="ExpenseType" @bind-Value="demandDetail.ExpenseType" class="form-control">
                     @foreach (var expense in expenseTypes)
@@ -68,21 +78,7 @@
                 </InputSelect>
                 <ValidationMessage For="@(() => demandDetail.ExpenseType)" />
             </div>
-        </div>
-
-        <!-- Spend Category, Cost Type -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="SpendCategory" class="form-label">Spend Category:</label>
-                <InputSelect id="SpendCategory" @bind-Value="demandDetail.SpendCategory" class="form-control">
-                    @foreach (var category in spendCategories)
-                    {
-                        <option value="@category">@category</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => demandDetail.SpendCategory)" />
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <label for="CostType" class="form-label">Cost Type:</label>
                 <InputSelect id="CostType" @bind-Value="demandDetail.CostType" class="form-control">
                     @foreach (var cost in costTypes)
@@ -92,14 +88,15 @@
                 </InputSelect>
                 <ValidationMessage For="@(() => demandDetail.CostType)" />
             </div>
-        </div>
-
-        <!-- Cost Amount, Current Cost -->
-        <div class="row mb-3">
-            <div class="col-md-2">
-                <label for="CurrentCost" class="form-label">Current Cost:</label>
-                <InputNumber id="CurrentCost" @bind-Value="demandDetail.CurrentCost" class="form-control" />
-                <ValidationMessage For="@(() => demandDetail.CurrentCost)" />
+            <div class="col-md-3">
+                <label for="SpendCategory" class="form-label">Spend Category:</label>
+                <InputSelect id="SpendCategory" @bind-Value="demandDetail.SpendCategory" class="form-control">
+                    @foreach (var category in spendCategories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => demandDetail.SpendCategory)" />
             </div>
         </div>
 
@@ -171,6 +168,7 @@
     private List<string> expenseTypes = new();
     private List<string> spendCategories = new();
     private List<string> costTypes = new();
+    private List<string> scenarioTypes = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -184,6 +182,7 @@
         expenseTypes = options.GetValueOrDefault("ExpenseType", new List<string>());
         spendCategories = options.GetValueOrDefault("SpendCategory", new List<string>());
         costTypes = options.GetValueOrDefault("CostType", new List<string>());
+        scenarioTypes = options.GetValueOrDefault("ScenarioType", new List<string>());
     }
 
     private async Task HandleValidSubmit()

@@ -12,6 +12,6 @@ namespace InvesTechPlanner.UseCases.Interfaces
         Task<IEnumerable<DemandDetail>> GetDetailedDemandID(int demandId);
         Task<IEnumerable<DemandDetail>> GetDemandDetailsByDemandId(int demandId);
         Task<MemoryStream> ExportDemandDetailsToCsv(int demandId);
-        Task<Dictionary<string, Dictionary<string, SummaryDto>>> GetSummaryByCostType(int demandId);
+        Task<Dictionary<string, Dictionary<string, Dictionary<string, SummaryDto>>>> GetSummaryByScenarioAndCostType(int demandId);
     }
 }

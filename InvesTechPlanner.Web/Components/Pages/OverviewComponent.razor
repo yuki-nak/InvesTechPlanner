@@ -199,9 +199,10 @@
             @if (isEditMode)
             {
                 <InputSelect class="form-control" @bind-Value="demand.Status">
-                    <option value="Open">Open</option>
-                    <option value="Closed">Closed</option>
-                    <option value="On Hold">On Hold</option>
+                    @foreach (var status in statuses)
+                    {
+                        <option value="@status">@status</option>
+                    }
                 </InputSelect>
             }
             else
@@ -305,6 +306,17 @@
                 <p class="form-control-static">@demand.Remarks</p>
             }
         </div>
+        <div class="col-md-6">
+            <label class="form-label">Document URL</label>
+            @if (isEditMode)
+            {
+                <InputTextArea class="form-control" @bind-Value="demand.DocUrl" />
+            }
+            else
+            {
+                <p class="form-control-static">@demand.DocUrl</p>
+            }
+        </div>
     </div>
 </EditForm>
 
@@ -317,6 +329,7 @@
     private List<string> demandPriorities = new();
     private List<string> investClassifications = new();
     private List<string> investmentScales = new();
+    private List<string> statuses = new();
 
     [Parameter]
     public int DemandId { get; set; }
@@ -335,6 +348,7 @@
         demandPriorities = options.GetValueOrDefault("DemandPriority", new List<string>());
         investClassifications = options.GetValueOrDefault("InvestClassification", new List<string>());
         investmentScales = options.GetValueOrDefault("InvestmentScale", new List<string>());
+        statuses = options.GetValueOrDefault("Status", new List<string>());
     }
 
     private void ToggleEditMode()
