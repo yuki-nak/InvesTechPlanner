@@ -17,21 +17,21 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             using var connection = _connectionFactory.CreateConnection();
             const string insertQuery = @"
                 INSERT INTO DemandDetails (DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, CostType,
-                                           CurrentCost, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, DateUpdated, CreatedBy, 
-                                           IsInactive, Remarks)
+                                           Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, DateUpdated, CreatedBy, 
+                                           IsInactive, Remarks, ScenarioType)
                 VALUES (@DemandId, @Title, @Description, @SpendDept, @ExpenseType, @SpendCategory, @CostType, 
-                        @CurrentCost, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, @DateUpdated, @CreatedBy, 
-                        @IsInactive, @Remarks)";
+                        @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, @DateUpdated, @CreatedBy, 
+                        @IsInactive, @Remarks, @ScenarioType)";
 
             await connection.ExecuteAsync(insertQuery, demandDetail);
 
             const string historyInsertQuery = @"
                 INSERT INTO DemandDetailsHistory (DemandDetailsId, DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, 
-                                                  CostType, CurrentCost, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
-                                                  DateUpdated, CreatedBy, IsInactive, Remarks)
+                                                  CostType, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
+                                                  DateUpdated, CreatedBy, IsInactive, Remarks, @ScenarioType)
                 VALUES (@DemandDetailsId, @DemandId, @Title, @Description, @SpendDept, @ExpenseType, @SpendCategory, 
-                        @CostType, @CurrentCost, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
-                        @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
+                        @CostType, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
+                        @DateUpdated, @CreatedBy, @IsInactive, @Remarks, @ScenarioType)";
 
             await connection.ExecuteAsync(historyInsertQuery, demandDetail);
         }
@@ -63,20 +63,20 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             const string updateQuery = @"
                 UPDATE DemandDetails
                 SET Title = @Title, Description = @Description, SpendDept = @SpendDept, ExpenseType = @ExpenseType, SpendCategory = @SpendCategory, 
-                    CostType = @CostType, CurrentCost = @CurrentCost, Year0 = @Year0, Year1 = @Year1, Year2 = @Year2, 
+                    CostType = @CostType, Year0 = @Year0, Year1 = @Year1, Year2 = @Year2, 
                     Year3 = @Year3, Year4 = @Year4, Year5 = @Year5, DateUpdated = @DateUpdated, CreatedBy = @CreatedBy, IsInactive = @IsInactive, 
-                    Remarks = @Remarks
+                    Remarks = @Remarks, ScenarioType = @ScenarioType
                 WHERE DemandDetailsId = @DemandDetailsId";
 
             await connection.ExecuteAsync(updateQuery, demandDetail);
 
             const string historyInsertQuery = @"
                 INSERT INTO DemandDetailsHistory (DemandDetailsId, DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, 
-                                                  CostType, CurrentCost, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
-                                                  DateUpdated, CreatedBy, IsInactive, Remarks)
+                                                  CostType, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
+                                                  DateUpdated, CreatedBy, IsInactive, Remarks, ScenarioType)
                 VALUES (@DemandDetailsId, @DemandId, @Title, @Description, @SpendDept, @ExpenseType, @SpendCategory, 
-                        @CostType, @CurrentCost, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
-                        @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
+                        @CostType, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
+                        @DateUpdated, @CreatedBy, @IsInactive, @Remarks, @ScenarioType)";
 
             await connection.ExecuteAsync(historyInsertQuery, demandDetail);
         }
@@ -96,11 +96,11 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             {
                 const string historyInsertQuery = @"
                     INSERT INTO DemandDetailsHistory (DemandDetailsId, DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, 
-                                                      CostType, CurrentCost, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
-                                                      DateUpdated, CreatedBy, IsInactive, Remarks)
+                                                      CostType, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
+                                                      DateUpdated, CreatedBy, IsInactive, Remarks, ScenarioType)
                     VALUES (@DemandDetailsId, @DemandId, @Title, @Description, @SpendDept, @ExpenseType, @SpendCategory, 
-                            @CostType, @CurrentCost, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
-                            @DateUpdated, @CreatedBy, @IsInactive, @Remarks)";
+                            @CostType, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
+                            @DateUpdated, @CreatedBy, @IsInactive, @Remarks, @ScenarioType)";
 
                 await connection.ExecuteAsync(historyInsertQuery, demandDetail);
             }

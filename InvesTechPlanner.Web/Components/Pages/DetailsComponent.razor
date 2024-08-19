@@ -7,6 +7,24 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <h3>Demand Details</h3>
+
+<!-- Filter Section -->
+<div class="row mb-3">
+    <div class="col-md-2">
+        <label for="ScenarioFilter" class="form-label">Scenario Type</label>
+        <InputSelect id="ScenarioFilter" @bind-Value="selectedScenarioType" class="form-control">
+            <option value="">All</option>
+            @foreach (var scenarioType in scenarioTypes)
+            {
+                <option value="@scenarioType">@scenarioType</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+        <button class="btn btn-primary" @onclick="FilterByScenarioType">Apply Filter</button>
+    </div>
+</div>
+
 <!-- Export to CSV Button -->
 <div class="mb-3">
     <button class="btn btn-secondary" @onclick="ExportCsv">
@@ -90,7 +108,6 @@
                                 </InputSelect>
                                 <ValidationMessage For="@(() => editingDetail.ScenarioType)" />
                             </div>
-
                         </div>
 
                         <div class="row mb-3">
@@ -192,11 +209,8 @@ else
         <thead>
             <tr>
                 <th>Details Title</th>
-                <!-- Description -->
                 <th>Spend Dept</th>
                 <th>Expense Type</th>
-                <!-- Spend Category -->
-                <!-- Cost Type -->
                 <th>Scenario</th>
                 <th>Year 0</th>
                 <th>Year 1</th>
@@ -204,7 +218,6 @@ else
                 <th>Year 3</th>
                 <th>Year 4</th>
                 <th>Year 5</th>
-                <!-- Remarks -->
                 <th>Action</th>
             </tr>
         </thead>
@@ -213,11 +226,8 @@ else
             {
                 <tr>
                     <td>@detail.Title</td>
-                    <!-- detail.Description -->
                     <td>@detail.SpendDept</td>
                     <td>@detail.ExpenseType</td>
-                    <!-- detail.SpendCategory -->
-                    <!-- detail.CostType -->
                     <td>@detail.ScenarioType</td>
                     <td>@(detail.Year0?.ToString("N0") ?? "0")</td>
                     <td>@(detail.Year1?.ToString("N0") ?? "0")</td>
@@ -225,7 +235,6 @@ else
                     <td>@(detail.Year3?.ToString("N0") ?? "0")</td>
                     <td>@(detail.Year4?.ToString("N0") ?? "0")</td>
                     <td>@(detail.Year5?.ToString("N0") ?? "0")</td>
-                    <!-- detail.Remarks -->
                     <td>
                         <button class="btn btn-primary btn-sm me-2" @onclick="() => EditDetail(detail)">
                             <i class="fas fa-pencil-alt"></i>
@@ -242,6 +251,7 @@ else
 
 @code {
     private List<DemandDetailDto> demandDetails = new();
+    private List<DemandDetailDto> demandDetailsBackup = new();
     private DemandDetailDto deleteCandidate = new();
     private DemandDetailDto editingDetail = new();
     private bool showDeleteConfirmation = false;
@@ -252,6 +262,8 @@ else
     private List<string> spendCategories = new();
     private List<string> costTypes = new();
     private List<string> scenarioTypes = new();
+
+    private string selectedScenarioType = "";
 
     [Parameter]
     public int DemandId { get; set; }
@@ -272,6 +284,21 @@ else
     {
         var details = await DemandDetailsService.GetDemandDetailsByDemandId(DemandId);
         demandDetails = details.Where(d => d.IsInactive != true).ToList();
+        demandDetailsBackup = demandDetails.ToList(); // Backup the original list
+    }
+
+    private void FilterByScenarioType()
+    {
+        if (string.IsNullOrEmpty(selectedScenarioType))
+        {
+            demandDetails = demandDetailsBackup.ToList();
+        }
+        else
+        {
+            demandDetails = demandDetailsBackup
+                .Where(d => d.ScenarioType == selectedScenarioType)
+                .ToList();
+        }
     }
 
     private void ConfirmDelete(DemandDetailDto detail)
