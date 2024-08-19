@@ -1,0 +1,186 @@
+USE [InvesTechPlannerDB]
+GO
+/****** Object:  Table [dbo].[Demand]    Script Date: 2024/08/19 14:34:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Demand](
+    [DemandID] [int] IDENTITY(1,1) NOT NULL,
+    [Title] [nvarchar](255) NOT NULL,
+    [RequestedDept] [nvarchar](255) NULL,
+    [RequestedBy] [nvarchar](255) NULL,
+    [DemandOwner] [nvarchar](255) NULL,
+    [DemandCategory] [nvarchar](255) NULL,
+    [Objective] [nvarchar](max) NULL,
+    [Proposal] [nvarchar](max) NULL,
+    [InvestmentDetails] [nvarchar](max) NULL,
+    [BusinessImpactIfNotConducted] [nvarchar](max) NULL,
+    [RiskComment] [nvarchar](max) NULL,
+    [DemandPriority] [nvarchar](50) NULL,
+    [Assumption] [nvarchar](max) NULL,
+    [Dependency] [nvarchar](max) NULL,
+    [InvestClassification] [nvarchar](255) NULL,
+    [InvestmentScale] [nvarchar](255) NULL,
+    [PMOResponsible] [nvarchar](255) NULL,
+    [ITBizPartner] [nvarchar](255) NULL,
+    [PlannedStart] [date] NULL,
+    [PlannedEnd] [date] NULL,
+    [FiscalYear] [nvarchar](4) NULL,
+    [DateCreated] [datetime] NULL,
+    [DateUpdated] [datetime] NULL,
+    [CreatedBy] [nvarchar](255) NULL,
+    [IsInactive] [bit] NULL,
+    [Remarks] [nvarchar](max) NULL,
+    [Status] [nvarchar](50) NULL,
+    [DocUrl] [varchar](500) NULL,
+PRIMARY KEY CLUSTERED 
+(
+    [DemandID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Demand] ADD  DEFAULT (getdate()) FOR [DateCreated]
+GO
+ALTER TABLE [dbo].[Demand] ADD  DEFAULT (getdate()) FOR [DateUpdated]
+GO
+ALTER TABLE [dbo].[Demand] ADD  DEFAULT ((0)) FOR [IsInactive]
+GO
+
+
+-------------
+
+
+USE [InvesTechPlannerDB]
+GO
+/****** Object:  Table [dbo].[DemandHistory]    Script Date: 2024/08/19 14:45:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DemandHistory](
+    [HistoryID] [int] IDENTITY(1,1) NOT NULL,
+    [DemandID] [int] NULL,
+    [Title] [nvarchar](255) NULL,
+    [RequestedDept] [nvarchar](255) NULL,
+    [RequestedBy] [nvarchar](255) NULL,
+    [DemandOwner] [nvarchar](255) NULL,
+    [DemandCategory] [nvarchar](255) NULL,
+    [Objective] [nvarchar](max) NULL,
+    [Proposal] [nvarchar](max) NULL,
+    [InvestmentDetails] [nvarchar](max) NULL,
+    [BusinessImpactIfNotConducted] [nvarchar](max) NULL,
+    [RiskComment] [nvarchar](max) NULL,
+    [DemandPriority] [nvarchar](50) NULL,
+    [Assumption] [nvarchar](max) NULL,
+    [Dependency] [nvarchar](max) NULL,
+    [InvestClassification] [nvarchar](255) NULL,
+    [InvestmentScale] [nvarchar](255) NULL,
+    [PMOResponsible] [nvarchar](255) NULL,
+    [ITBizPartner] [nvarchar](255) NULL,
+    [PlannedStart] [date] NULL,
+    [PlannedEnd] [date] NULL,
+    [FiscalYear] [nvarchar](4) NULL,
+    [DateCreated] [datetime] NULL,
+    [DateUpdated] [datetime] NULL,
+    [CreatedBy] [nvarchar](255) NULL,
+    [IsInactive] [bit] NULL,
+    [Remarks] [nvarchar](max) NULL,
+    [Status] [nvarchar](50) NULL,
+    [DocUrl] [varchar](500) NULL,
+PRIMARY KEY CLUSTERED 
+(
+    [HistoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+-----------
+
+
+USE [InvesTechPlannerDB]
+GO
+/****** Object:  Table [dbo].[DemandDetails]    Script Date: 2024/08/19 14:45:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DemandDetails](
+    [DemandDetailsId] [int] IDENTITY(1,1) NOT NULL,
+    [DemandId] [int] NULL,
+    [Title] [nvarchar](255) NOT NULL,
+    [Description] [nvarchar](max) NULL,
+    [SpendDept] [nvarchar](255) NULL,
+    [ExpenseType] [nvarchar](255) NULL,
+    [SpendCategory] [nvarchar](255) NULL,
+    [CostType] [nvarchar](255) NULL,
+    [CurrentCost] [decimal](18, 2) NULL,
+    [Year0] [decimal](18, 2) NULL,
+    [Year1] [decimal](18, 2) NULL,
+    [Year2] [decimal](18, 2) NULL,
+    [Year3] [decimal](18, 2) NULL,
+    [Year4] [decimal](18, 2) NULL,
+    [Year5] [decimal](18, 2) NULL,
+    [DateCreated] [datetime] NULL,
+    [DateUpdated] [datetime] NULL,
+    [CreatedBy] [nvarchar](255) NULL,
+    [IsInactive] [bit] NULL,
+    [Remarks] [nvarchar](max) NULL,
+    [ScenarioType] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+    [DemandDetailsId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[DemandDetails] ADD  DEFAULT (getdate()) FOR [DateCreated]
+GO
+ALTER TABLE [dbo].[DemandDetails] ADD  DEFAULT (getdate()) FOR [DateUpdated]
+GO
+ALTER TABLE [dbo].[DemandDetails] ADD  DEFAULT ((0)) FOR [IsInactive]
+GO
+ALTER TABLE [dbo].[DemandDetails]  WITH CHECK ADD FOREIGN KEY([DemandId])
+REFERENCES [dbo].[Demand] ([DemandID])
+GO
+
+
+----------
+
+
+USE [InvesTechPlannerDB]
+GO
+/****** Object:  Table [dbo].[DemandDetailsHistory]    Script Date: 2024/08/19 14:47:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DemandDetailsHistory](
+    [HistoryDetailsID] [int] IDENTITY(1,1) NOT NULL,
+    [DemandDetailsId] [int] NULL,
+    [DemandId] [int] NULL,
+    [Title] [nvarchar](255) NULL,
+    [Description] [nvarchar](max) NULL,
+    [SpendDept] [nvarchar](255) NULL,
+    [ExpenseType] [nvarchar](255) NULL,
+    [SpendCategory] [nvarchar](255) NULL,
+    [CostType] [nvarchar](255) NULL,
+    [CostAmount] [decimal](18, 2) NULL,
+    [CurrentCost] [decimal](18, 2) NULL,
+    [Year0] [decimal](18, 2) NULL,
+    [Year1] [decimal](18, 2) NULL,
+    [Year2] [decimal](18, 2) NULL,
+    [Year3] [decimal](18, 2) NULL,
+    [Year4] [decimal](18, 2) NULL,
+    [Year5] [decimal](18, 2) NULL,
+    [DateCreated] [datetime] NULL,
+    [DateUpdated] [datetime] NULL,
+    [CreatedBy] [nvarchar](255) NULL,
+    [IsInactive] [bit] NULL,
+    [Remarks] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+    [HistoryDetailsID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
