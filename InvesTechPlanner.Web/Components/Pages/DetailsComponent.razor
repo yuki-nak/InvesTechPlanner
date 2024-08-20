@@ -283,7 +283,11 @@ else
     private async Task LoadDemandDetails()
     {
         var details = await DemandDetailsService.GetDemandDetailsByDemandId(DemandId);
-        demandDetails = details.Where(d => d.IsInactive != true).ToList();
+        demandDetails = details
+            .Where(d => d.IsInactive != true)
+            .OrderBy(d => d.ScenarioType == "Current" ? 0 : 1)
+            .ThenBy(d => d.ScenarioType) 
+            .ToList();
         demandDetailsBackup = demandDetails.ToList(); // Backup the original list
     }
 
