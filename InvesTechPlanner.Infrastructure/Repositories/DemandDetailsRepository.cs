@@ -28,7 +28,7 @@ namespace InvesTechPlanner.Infrastructure.Repositories
             const string historyInsertQuery = @"
                 INSERT INTO DemandDetailsHistory (DemandDetailsId, DemandId, Title, Description, SpendDept, ExpenseType, SpendCategory, 
                                                   CostType, Year0, Year1, Year2, Year3, Year4, Year5, DateCreated, 
-                                                  DateUpdated, CreatedBy, IsInactive, Remarks, @ScenarioType)
+                                                  DateUpdated, CreatedBy, IsInactive, Remarks, ScenarioType)
                 VALUES (@DemandDetailsId, @DemandId, @Title, @Description, @SpendDept, @ExpenseType, @SpendCategory, 
                         @CostType, @Year0, @Year1, @Year2, @Year3, @Year4, @Year5, @DateCreated, 
                         @DateUpdated, @CreatedBy, @IsInactive, @Remarks, @ScenarioType)";
